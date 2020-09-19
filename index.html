@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AT</title>
+<meta charset="utf-8" />
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.css" />
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/vue@latest/dist/vue.js"></script>
+<script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+<script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.js"></script>
+
+
+<script type="module">
+
+const dataUrl = "https://raw.githubusercontent.com/atsymboldot/andors-trail-fun-stuff/master/data.json";
+
+const filenames = {
+	actorconditions: [
+		"actorconditions_arulir_mountain.json",
+		"actorconditions_brimhaven.json",
+		"actorconditions_debug.json",
+		"actorconditions_graveyard1.json",
+		"actorconditions_guynmart.json",
+		"actorconditions_omicronrg9.json",
+		"actorconditions_stoutford.json",
+		"actorconditions_stoutford_combined.json",
+		"actorconditions_trader_teksin.json",
+		"actorconditions_v0610.json",
+		"actorconditions_v0611.json",
+		"actorconditions_v0611_2.json",
+		"actorconditions_v0612_2.json",
+		"actorconditions_v069.json",
+		"actorconditions_v069_bwm.json",
+		"actorconditions_v070.json",
+	],
+	conversationlist: [
+		"conversationlist_agthor.json",
+		"conversationlist_ailshara.json",
+		"conversationlist_algangror.json",
+		"conversationlist_alynndir.json",
+		"conversationlist_ambelie.json",
+		"conversationlist_arghes.json",
+		"conversationlist_arulir_mountain.json",
+		"conversationlist_aulowenn.json",
+		"conversationlist_benbyr.json",
+		"conversationlist_blackwater_harlenn.json",
+		"conversationlist_blackwater_herec.json",
+		"conversationlist_blackwater_kazaul.json",
+		"conversationlist_blackwater_lower.json",
+		"conversationlist_blackwater_signs.json",
+		"conversationlist_blackwater_throdna.json",
+		"conversationlist_blackwater_upper.json",
+		"conversationlist_brimhaven.json",
+		"conversationlist_brimhaven2.json",
+		"conversationlist_brimhaven_blackjack.json",
+		"conversationlist_brimhaven_blackjack_game.json",
+		"conversationlist_buceth.json",
+		"conversationlist_bugfix_0_7_4.json",
+		"conversationlist_burhczyd.json",
+		"conversationlist_bwm_agent_1.json",
+		"conversationlist_bwm_agent_2.json",
+		"conversationlist_bwm_agent_3.json",
+		"conversationlist_bwm_agent_4.json",
+		"conversationlist_bwm_agent_5.json",
+		"conversationlist_bwm_agent_6.json",
+		"conversationlist_charwood1.json",
+		"conversationlist_charwood2.json",
+		"conversationlist_crossglen.json",
+		"conversationlist_crossglen_gruil.json",
+		"conversationlist_crossglen_leonid.json",
+		"conversationlist_crossglen_leta.json",
+		"conversationlist_crossglen_odair.json",
+		"conversationlist_crossglen_tharal.json",
+		"conversationlist_crossroads_1.json",
+		"conversationlist_crossroads_2.json",
+		"conversationlist_crossroads_3.json",
+		"conversationlist_debug.json",
+		"conversationlist_duaina.json",
+		"conversationlist_elwyl.json",
+		"conversationlist_elythom_1.json",
+		"conversationlist_erinith.json",
+		"conversationlist_ervelyn.json",
+		"conversationlist_esfiume.json",
+		"conversationlist_fallhaven.json",
+		"conversationlist_fallhaven_arcir.json",
+		"conversationlist_fallhaven_athamyr.json",
+		"conversationlist_fallhaven_bucus.json",
+		"conversationlist_fallhaven_church.json",
+		"conversationlist_fallhaven_drunk.json",
+		"conversationlist_fallhaven_gaela.json",
+		"conversationlist_fallhaven_larcal.json",
+		"conversationlist_fallhaven_nocmar.json",
+		"conversationlist_fallhaven_oldman.json",
+		"conversationlist_fallhaven_potions.json",
+		"conversationlist_fallhaven_south.json",
+		"conversationlist_fallhaven_tavern.json",
+		"conversationlist_fallhaven_unnmir.json",
+		"conversationlist_fallhaven_unzel.json",
+		"conversationlist_fallhaven_vacor.json",
+		"conversationlist_fallhaven_warden.json",
+		"conversationlist_falothen.json",
+		"conversationlist_farrik.json",
+		"conversationlist_fayvara.json",
+		"conversationlist_fields_1.json",
+		"conversationlist_flagstone.json",
+		"conversationlist_foamingflask.json",
+		"conversationlist_foamingflask_guards.json",
+		"conversationlist_foamingflask_outsideguard.json",
+		"conversationlist_gandoren.json",
+		"conversationlist_glasforn_fixes.json",
+		"conversationlist_graveyard1.json",
+		"conversationlist_guynmart.json",
+		"conversationlist_guynmart2.json",
+		"conversationlist_guynmart2_npc.json",
+		"conversationlist_guynmart_npc.json",
+		"conversationlist_gylew.json",
+		"conversationlist_hadracor.json",
+		"conversationlist_halvor_surprise.json",
+		"conversationlist_highwayman1.json",
+		"conversationlist_hirazinn.json",
+		"conversationlist_hjaldar.json",
+		"conversationlist_ingus.json",
+		"conversationlist_jan.json",
+		"conversationlist_jhaeld.json",
+		"conversationlist_jolnor.json",
+		"conversationlist_kantya.json",
+		"conversationlist_kaori.json",
+		"conversationlist_kaverin.json",
+		"conversationlist_kendelow.json",
+		"conversationlist_lethenlor.json",
+		"conversationlist_lleglaris.json",
+		"conversationlist_lodar.json",
+		"conversationlist_lodar0g.json",
+		"conversationlist_lodarfg.json",
+		"conversationlist_lodarfg2.json",
+		"conversationlist_lodarfg3.json",
+		"conversationlist_lodarfg4.json",
+		"conversationlist_lodarmobs.json",
+		"conversationlist_loneford_1.json",
+		"conversationlist_loneford_2.json",
+		"conversationlist_loneford_3.json",
+		"conversationlist_loneford_4.json",
+		"conversationlist_loneford_kuldan.json",
+		"conversationlist_lowyna.json",
+		"conversationlist_maelveon.json",
+		"conversationlist_maevalia.json",
+		"conversationlist_mazeg.json",
+		"conversationlist_mikhail.json",
+		"conversationlist_mikhail_foodpoison.json",
+		"conversationlist_minarra.json",
+		"conversationlist_norath.json",
+		"conversationlist_ogam.json",
+		"conversationlist_oluag.json",
+		"conversationlist_omicronrg9.json",
+		"conversationlist_pathway_fallhaven.json",
+		"conversationlist_prim_arghest.json",
+		"conversationlist_prim_bjorgur.json",
+		"conversationlist_prim_fulus.json",
+		"conversationlist_prim_guthbered.json",
+		"conversationlist_prim_inn.json",
+		"conversationlist_prim_merchants.json",
+		"conversationlist_prim_outside.json",
+		"conversationlist_prim_tavern.json",
+		"conversationlist_pwcave.json",
+		"conversationlist_reinkarr.json",
+		"conversationlist_remgard_bridgeguard.json",
+		"conversationlist_remgard_idolsigns.json",
+		"conversationlist_remgard_villagers1.json",
+		"conversationlist_remgard_villagers2.json",
+		"conversationlist_rogorn.json",
+		"conversationlist_rothses.json",
+		"conversationlist_shortcut_lodar.json",
+		"conversationlist_sign_ulirfendor.json",
+		"conversationlist_sign_waterwaycave.json",
+		"conversationlist_signs_pre067.json",
+		"conversationlist_signs_v0611.json",
+		"conversationlist_signs_v068.json",
+		"conversationlist_stoutford.json",
+		"conversationlist_stoutford_combined.json",
+		"conversationlist_taevinn.json",
+		"conversationlist_talion.json",
+		"conversationlist_talion_2.json",
+		"conversationlist_thievesguild_1.json",
+		"conversationlist_thorin.json",
+		"conversationlist_thorinbone.json",
+		"conversationlist_thukuzun.json",
+		"conversationlist_tinlyn.json",
+		"conversationlist_tinlyn_sheep.json",
+		"conversationlist_tiqui.json",
+		"conversationlist_toszylae.json",
+		"conversationlist_toszylae_fix.json",
+		"conversationlist_toszylae_guard.json",
+		"conversationlist_trader_teksin.json",
+		"conversationlist_twoteeth.json",
+		"conversationlist_ulirfendor.json",
+		"conversationlist_umar.json",
+		"conversationlist_unzel2.json",
+		"conversationlist_v0612graves.json",
+		"conversationlist_v070signs1.json",
+		"conversationlist_v070signs2.json",
+		"conversationlist_vacor2.json",
+		"conversationlist_vilegard_erttu.json",
+		"conversationlist_vilegard_shops.json",
+		"conversationlist_vilegard_tavern.json",
+		"conversationlist_vilegard_v0610.json",
+		"conversationlist_vilegard_v070.json",
+		"conversationlist_vilegard_villagers.json",
+		"conversationlist_wilderness.json",
+		"conversationlist_woodcabin.json",
+		"conversationlist_wrye.json",
+	],
+	droplists: [
+		"droplists_arulir_mountain.json",
+		"droplists_brimhaven.json",
+		"droplists_brimhaven2.json",
+		"droplists_bugfix_0_7_4.json",
+		"droplists_crossglen.json",
+		"droplists_crossglen_outside.json",
+		"droplists_debug.json",
+		"droplists_fallhaven.json",
+		"droplists_graveyard1.json",
+		"droplists_guynmart.json",
+		"droplists_omicronrg9.json",
+		"droplists_pathway_fallhaven.json",
+		"droplists_shortcut_lodar.json",
+		"droplists_stoutford.json",
+		"droplists_stoutford_combined.json",
+		"droplists_trader_teksin.json",
+		"droplists_v0610_monsters.json",
+		"droplists_v0610_npcs.json",
+		"droplists_v0610_shops.json",
+		"droplists_v0611_monsters.json",
+		"droplists_v0611_npcs.json",
+		"droplists_v0611_shops.json",
+		"droplists_v068.json",
+		"droplists_v069_monsters.json",
+		"droplists_v069_npcs.json",
+		"droplists_v070_mobs.json",
+		"droplists_v070_quest.json",
+		"droplists_v070_shops.json",
+		"droplists_wilderness.json",
+	],
+	itemcategories: [
+		"itemcategories_1.json",
+		"itemcategories_brimhaven.json",
+		"itemcategories_omicronrg9.json",
+		"itemcategories_stoutford_combined.json",
+	],
+	itemlist: [
+		"itemlist_animal.json",
+		"itemlist_armour.json",
+		"itemlist_arulir_mountain.json",
+		"itemlist_brimhaven.json",
+		"itemlist_brimhaven2.json",
+		"itemlist_bugfix_0_7_4.json",
+		"itemlist_burhczyd.json",
+		"itemlist_debug.json",
+		"itemlist_food.json",
+		"itemlist_graveyard1.json",
+		"itemlist_guynmart.json",
+		"itemlist_junk.json",
+		"itemlist_money.json",
+		"itemlist_necklaces.json",
+		"itemlist_omicronrg9.json",
+		"itemlist_pathway_fallhaven.json",
+		"itemlist_potions.json",
+		"itemlist_pre0610_unused.json",
+		"itemlist_quest.json",
+		"itemlist_rings.json",
+		"itemlist_shortcut_lodar.json",
+		"itemlist_stoutford.json",
+		"itemlist_stoutford_combined.json",
+		"itemlist_trader_teksin.json",
+		"itemlist_v0610_1.json",
+		"itemlist_v0610_2.json",
+		"itemlist_v0611_1.json",
+		"itemlist_v0611_2.json",
+		"itemlist_v0611_3.json",
+		"itemlist_v068.json",
+		"itemlist_v069.json",
+		"itemlist_v069_2.json",
+		"itemlist_v069_questitems.json",
+		"itemlist_v070.json",
+		"itemlist_v070_questitems.json",
+		"itemlist_weapons.json",
+	],
+	monsterlist: [
+		"monsterlist_arulir_mountain.json",
+		"monsterlist_brimhaven.json",
+		"monsterlist_brimhaven2.json",
+		"monsterlist_burhczyd.json",
+		"monsterlist_crossglen_animals.json",
+		"monsterlist_crossglen_npcs.json",
+		"monsterlist_debug.json",
+		"monsterlist_fallhaven_animals.json",
+		"monsterlist_fallhaven_npcs.json",
+		"monsterlist_graveyard1.json",
+		"monsterlist_guynmart.json",
+		"monsterlist_halvor_surprise.json",
+		"monsterlist_omicronrg9.json",
+		"monsterlist_pathway_fallhaven.json",
+		"monsterlist_stoutford.json",
+		"monsterlist_stoutford_combined.json",
+		"monsterlist_trader_teksin.json",
+		"monsterlist_v0610_monsters1.json",
+		"monsterlist_v0610_monsters2.json",
+		"monsterlist_v0610_npcs1.json",
+		"monsterlist_v0611_monsters1.json",
+		"monsterlist_v0611_npcs1.json",
+		"monsterlist_v0611_npcs2.json",
+		"monsterlist_v068_npcs.json",
+		"monsterlist_v069_monsters.json",
+		"monsterlist_v069_npcs.json",
+		"monsterlist_v070_charwood.json",
+		"monsterlist_v070_charwood2.json",
+		"monsterlist_v070_lodar1cave.json",
+		"monsterlist_v070_lodar5cave.json",
+		"monsterlist_v070_lodarcave.json",
+		"monsterlist_v070_lodarmaze.json",
+		"monsterlist_v070_lodarnpcs.json",
+		"monsterlist_v070_npcs.json",
+		"monsterlist_v070_oldcave.json",
+		"monsterlist_v070_roadcave.json",
+		"monsterlist_wilderness.json",
+	],
+	questlist: [
+		"questlist.json",
+		"questlist_arulir_mountain.json",
+		"questlist_brimhaven.json",
+		"questlist_brimhaven2.json",
+		"questlist_burhczyd.json",
+		"questlist_debug.json",
+		"questlist_graveyard1.json",
+		"questlist_guynmart.json",
+		"questlist_halvor_surprise.json",
+		"questlist_nondisplayed.json",
+		"questlist_omicronrg9.json",
+		"questlist_pathway_fallhaven.json",
+		"questlist_shortcut_lodar.json",
+		"questlist_stoutford.json",
+		"questlist_stoutford_combined.json",
+		"questlist_v0610.json",
+		"questlist_v0611.json",
+		"questlist_v0611_2.json",
+		"questlist_v0611_3.json",
+		"questlist_v068.json",
+		"questlist_v069.json",
+		"questlist_v070_charwood.json",
+		"questlist_v070_lodar.json",
+		"questlist_v070_lowyna.json",
+		"questlist_v070_misc.json",
+	]
+};
+
+const tableHeaders = {
+    monsterlist: [
+        { key: "name", sortable: true, label: "Name" },
+        { key: "maxHP", sortable: true, label: "HP" },
+        { key: "combat", label: "Combat Stats" },
+        { key: "maxAP", sortable: true, label: "AP" },
+        { key: "attackCost", sortable: true, label: "Attack AP" },
+        { key: "moveCost", sortable: true, label: "Move AP" },
+        { key: "movementAggressionType", sortable: true, label: "Chase" },
+		{ key: "effects", label: "Hit Effects" },
+        { key: "unique", sortable: true, label: "Unique" },
+        { key: "metadata", label: "Metadata" },
+    ],
+	npc: [
+		{ key: "name", sortable: true, label: "Name" },
+        { key: "maxAP", sortable: true, label: "AP" },
+        { key: "moveCost", sortable: true, label: "Move AP" },
+        { key: "unique", sortable: true, label: "Unique" },
+        { key: "metadata", label: "Metadata" },
+	],
+	itemlist: [
+		{ key: "name", sortable: true, label: "Name" },
+		{ key: "id", sortable: true, label: "ID" },
+		{ key: "iconID", sortable: true, label: "Icon ID" },
+		{ key: "description", sortable: true, label: "Description" },
+		{ key: "category", sortable: true, label: "Category" },
+		{ key: "displaytype", sortable: true, label: "Display Type" },
+		{ key: "hasManualPrice", sortable: true, label: "Manual Price?" },
+		{ key: "baseMarketCost", sortable: true, label: "Cost" },
+		{ key: "hitEffect", sortable: true, label: "Hit Effect" },
+		{ key: "hitReceivedEffect", sortable: true, label: "Hit Received Effect" },
+		{ key: "equipEffect", sortable: true, label: "Equip Effect" },
+		{ key: "killEffect", sortable: true, label: "Kill Effect" },
+		{ key: "useEffect", sortable: true, label: "Use Effect" },
+	],
+};
+
+class AndorsTrailData {
+	async initialize(url) {
+		this.data = await fetch(url).then(r => r.json());
+		this.normalizeData();
+		this.pruneData();
+	}
+
+	getMonsters() {
+		return this.data.monsterlist.filter(m => m.attackDamage.max > 0);
+	}
+
+	getNpcs() {
+		return this.data.monsterlist.filter(m => m.attackDamage.max == 0);
+	}
+
+	getItems() {
+		return this.data.itemlist;
+	}
+
+	normalizeData() {
+		if (this.data.monsterlist) {
+			const monsters = this.data.monsterlist;
+			for (let m of this.data.monsterlist) {
+				if (!m.attackChance) m.attackChance = 0;
+				if (!m.criticalSkill) m.criticalSkill = 0;
+				if (!m.criticalMultiplier) m.criticalMultiplier = 0;
+				if (!m.blockChance) m.blockChance = 0;
+				if (!m.damageResistance) m.damageResistance = 0;
+				if (!m.attackDamage) m.attackDamage = { min: 0, max: 0 };
+				if (!m.maxHP) m.maxHP = 1;
+				if (!m.maxAP) m.maxAP = 10;
+				if (!m.attackCost) m.attackCost = 10;
+				if (!m.moveCost) m.moveCost = 10;
+				if (!m.movementAggressionType) m.movementAggressionType = 'none';
+				if (!m.unique) m.unique = 0;
+			}
+		}
+	}
+
+	pruneData() {
+		this.data.monsterlist = this.data.monsterlist.filter(m => m.damageResistance < 100);
+	}
+}
+
+window.onload = async () => {
+	const data = new AndorsTrailData();
+	await data.initialize(dataUrl);
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                monsterData: data.getMonsters(),
+                monsterFields: tableHeaders.monsterlist,
+				npcData: data.getNpcs(),
+				npcFields: tableHeaders.monsterlist,
+				itemData: data.getItems(),
+				itemFields: tableHeaders.itemlist,
+            };
+        },
+        methods: {
+            formatCombatStats(item) {
+				if (!item.attackDamage.max) return '-';
+                const ac = item.attackChance;
+				const dmg = this.formatRange(item.attackDamage);
+				const crit = (item.criticalSkill > 0 && item.criticalMultiplier != 1) ? ` +${item.criticalSkill}x${item.criticalMultiplier}` : '';
+                const bc = item.blockChance;
+                const dr = item.damageResistance != 0 ? `/${item.damageResistance}` : ''; 
+                return `[${ac} ${dmg}${crit}] [${bc}${dr}]`;
+            },
+			formatEffects(item) {
+				const effects = [];
+				if (item.hitEffect) {
+					if (item.hitEffect.increaseCurrentHP) {
+						effects.push(`When hitting player: heal ${this.formatRange(item.hitEffect.increaseCurrentHP)} HP`);
+					}
+					if (item.hitEffect.conditionsTarget) {
+						for (const conditionTarget of item.hitEffect.conditionsTarget) {
+							effects.push('When hitting player: ' + this.formatEffect(conditionTarget) + ' on player');
+						}
+					}
+					if (item.hitEffect.conditionsSource) {
+						for (const conditionSource of item.hitEffect.conditionsSource) {
+							effects.push('When hitting player: ' + this.formatEffect(conditionSource) + ' on self');
+						}
+					}
+				}
+				if (item.hitReceivedEffect) {
+					if (item.hitReceivedEffect.conditionsSource) {
+						for (const conditionSource of item.hitReceivedEffect.conditionsSource) {
+							effects.push('When hit by player: ' + this.formatEffect(conditionSource) + ' on self');
+						}
+					}
+				}
+				return effects.join('; ');
+			},
+			formatEffect(effect) {
+				if (!effect.magnitude) effect.magnitude = 1;
+				if (!effect.duration) effect.duration = 1;
+				return `${effect.chance}% chance of ${effect.magnitude}x ${effect.condition} for ${effect.duration} rounds`;
+			},
+			formatRange(range) {
+				if (!range) return "0";
+				if (range.min == range.max) return `${range.min}`;
+				return `${range.min}-${range.max}`;
+			},
+            formatMetadata(item) {
+                const metadata = [];
+                if (item.id) metadata.push(`ID: ${item.id}`);
+                if (item.droplistID) metadata.push(`Droplist: ${item.droplistID}`);
+                if (item.phraseID) metadata.push(`Dialog: ${item.phraseID}`);
+                if (item.spawnGroup) metadata.push(`Spawn: ${item.spawnGroup}`);
+                if (item.iconID) metadata.push(`Icon: ${item.iconID}`);
+                if (item.faction) metadata.push(`Faction: ${item.faction}`);
+                if (item.monsterClass) metadata.push(`Class: ${item.monsterClass}`);
+                return metadata.join('; ');
+            },
+        },
+    });
+    document.getElementById('preload').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+};
+</script>
+</head>
+
+<body>
+<div id="preload">Loading, please wait...</div>
+<div id="app" style="display: none;">
+    <b-tabs>
+		<b-tab title="Monsters">
+			<p>&nbsp;</p>
+			<b-table small striped hover responsive sticky-header bordered :items="monsterData" :fields="monsterFields" style="max-height: 600px; font-size: 0.75em;">
+				<template v-slot:cell(combat)="data">{{ formatCombatStats(data.item) }}</template>
+				<template v-slot:cell(metadata)="data">{{ formatMetadata(data.item) }}</template>
+				<template v-slot:cell(effects)="data">{{ formatEffects(data.item) }}</template>
+				<template v-slot:cell()="data">{{ data.value }}</template>
+			</b-table>
+		</b-tab>
+		<b-tab title="NPCs">
+			<p>&nbsp;</p>
+			<b-table small striped hover responsive sticky-header bordered :items="npcData" :fields="npcFields" style="max-height: 600px; font-size: 0.75em;">
+				<template v-slot:cell(combat)="data">{{ formatCombatStats(data.item) }}</template>
+				<template v-slot:cell(metadata)="data">{{ formatMetadata(data.item) }}</template>
+				<template v-slot:cell(effects)="data">{{ formatEffects(data.item) }}</template>
+				<template v-slot:cell()="data">{{ data.value }}</template>
+			</b-table>
+		</b-tab>
+		<b-tab title="Items">
+			<p>&nbsp;</p>
+			<b-table small striped hover responsive sticky-header bordered :items="itemData" :fields="itemFields" style="max-height: 600px; font-size: 0.75em;">
+				<template v-slot:cell()="data">{{ data.value }}</template>
+			</b-table>
+		</b-tab>
+    </b-tabs>
+</div>
+
+</body>
+</html>

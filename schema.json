@@ -1,0 +1,256 @@
+{
+  "actorconditions": {
+    "abilityEffect": {
+      "increaseAttackChance": "<type 'int'>", 
+      "increaseAttackCost": "<type 'int'>", 
+      "increaseAttackDamage": {
+        "max": "<type 'int'>", 
+        "min": "<type 'int'>"
+      }, 
+      "increaseBlockChance": "<type 'int'>", 
+      "increaseCriticalSkill": "<type 'int'>", 
+      "increaseDamageResistance": "<type 'int'>", 
+      "increaseMaxAP": "<type 'int'>", 
+      "increaseMaxHP": "<type 'int'>", 
+      "increaseMoveCost": "<type 'int'>", 
+      "increaseReequipCost": "<type 'int'>", 
+      "increaseUseItemCost": "<type 'int'>", 
+      "visualEffectID": "<type 'unicode'>"
+    }, 
+    "category": "<type 'unicode'>", 
+    "fullRoundEffect": {
+      "increaseCurrentHP": {
+        "max": "<type 'int'>", 
+        "min": "<type 'int'>"
+      }, 
+      "visualEffectID": "<type 'unicode'>"
+    }, 
+    "iconID": "<type 'unicode'>", 
+    "id": "<type 'unicode'>", 
+    "isPositive": "<type 'int'>", 
+    "isStacking": "<type 'int'>", 
+    "name": "<type 'unicode'>", 
+    "roundEffect": {
+      "increaseCurrentAP": {
+        "max": "<type 'int'>", 
+        "min": "<type 'int'>"
+      }, 
+      "increaseCurrentHP": {
+        "max": "<type 'int'>", 
+        "min": "<type 'int'>"
+      }, 
+      "visualEffectID": "<type 'unicode'>"
+    }
+  }, 
+  "conversationlist": {
+    "id": "<type 'unicode'>", 
+    "message": "<type 'unicode'>", 
+    "replies": {
+      "nextPhraseID": "<type 'unicode'>", 
+      "requires": {
+        "negate": "<type 'bool'>", 
+        "requireID": "<type 'unicode'>", 
+        "requireType": "<type 'unicode'>", 
+        "value": "<type 'int'>"
+      }, 
+      "text": "<type 'unicode'>"
+    }, 
+    "rewards": {
+      "mapName": "<type 'unicode'>", 
+      "rewardID": "<type 'unicode'>", 
+      "rewardType": "<type 'unicode'>", 
+      "value": "<type 'int'>"
+    }, 
+    "switchToNPC": "<type 'unicode'>"
+  }, 
+  "droplists": {
+    "id": "<type 'unicode'>", 
+    "items": {
+      "chance": "<type 'unicode'>", 
+      "itemID": "<type 'unicode'>", 
+      "quantity": {
+        "max": "<type 'int'>", 
+        "min": "<type 'int'>"
+      }
+    }
+  }, 
+  "itemcategories": {
+    "actionType": "<type 'unicode'>", 
+    "id": "<type 'unicode'>", 
+    "inventorySlot": "<type 'unicode'>", 
+    "name": "<type 'unicode'>", 
+    "size": "<type 'unicode'>"
+  }, 
+  "itemlist": {
+    "baseMarketCost": "<type 'int'>", 
+    "category": "<type 'unicode'>", 
+    "description": "<type 'unicode'>", 
+    "displaytype": "<type 'unicode'>", 
+    "equipEffect": {
+      "addedConditions": {
+        "condition": "<type 'unicode'>", 
+        "magnitude": "<type 'int'>"
+      }, 
+      "increaseAttackChance": "<type 'int'>", 
+      "increaseAttackCost": "<type 'int'>", 
+      "increaseAttackDamage": {
+        "max": "<type 'int'>", 
+        "min": "<type 'int'>"
+      }, 
+      "increaseBlockChance": "<type 'int'>", 
+      "increaseCriticalSkill": "<type 'int'>", 
+      "increaseDamageResistance": "<type 'int'>", 
+      "increaseMaxAP": "<type 'int'>", 
+      "increaseMaxHP": "<type 'int'>", 
+      "increaseMoveCost": "<type 'int'>", 
+      "increaseReequipCost": "<type 'int'>", 
+      "increaseUseItemCost": "<type 'int'>", 
+      "setCriticalMultiplier": "<type 'float'>", 
+      "setNonWeaponDamageModifier": "<type 'int'>"
+    }, 
+    "hasManualPrice": "<type 'int'>", 
+    "hitEffect": {
+      "conditionsSource": {
+        "chance": "<type 'unicode'>", 
+        "condition": "<type 'unicode'>", 
+        "duration": "<type 'int'>", 
+        "magnitude": "<type 'int'>"
+      }, 
+      "conditionsTarget": {
+        "chance": "<type 'unicode'>", 
+        "condition": "<type 'unicode'>", 
+        "duration": "<type 'int'>", 
+        "magnitude": "<type 'int'>"
+      }, 
+      "increaseCurrentHP": {
+        "max": "<type 'int'>", 
+        "min": "<type 'int'>"
+      }
+    }, 
+    "hitReceivedEffect": {
+      "conditionsSource": {
+        "chance": "<type 'unicode'>", 
+        "condition": "<type 'unicode'>", 
+        "duration": "<type 'int'>", 
+        "magnitude": "<type 'int'>"
+      }, 
+      "conditionsTarget": {
+        "chance": "<type 'unicode'>", 
+        "condition": "<type 'unicode'>", 
+        "duration": "<type 'int'>", 
+        "magnitude": "<type 'int'>"
+      }, 
+      "increaseAttackerCurrentAP": {
+        "max": "<type 'int'>", 
+        "min": "<type 'int'>"
+      }, 
+      "increaseAttackerCurrentHP": {
+        "max": "<type 'int'>", 
+        "min": "<type 'int'>"
+      }, 
+      "increaseCurrentAP": {
+        "max": "<type 'int'>", 
+        "min": "<type 'int'>"
+      }, 
+      "increaseCurrentHP": {
+        "max": "<type 'int'>", 
+        "min": "<type 'int'>"
+      }
+    }, 
+    "iconID": "<type 'unicode'>", 
+    "id": "<type 'unicode'>", 
+    "killEffect": {
+      "conditionsSource": {
+        "chance": "<type 'unicode'>", 
+        "condition": "<type 'unicode'>", 
+        "duration": "<type 'int'>", 
+        "magnitude": "<type 'int'>"
+      }, 
+      "increaseCurrentAP": {
+        "max": "<type 'int'>", 
+        "min": "<type 'int'>"
+      }, 
+      "increaseCurrentHP": {
+        "max": "<type 'int'>", 
+        "min": "<type 'int'>"
+      }
+    }, 
+    "name": "<type 'unicode'>", 
+    "useEffect": {
+      "conditionsSource": {
+        "chance": "<type 'unicode'>", 
+        "condition": "<type 'unicode'>", 
+        "duration": "<type 'int'>", 
+        "magnitude": "<type 'int'>"
+      }, 
+      "increaseCurrentHP": {
+        "max": "<type 'int'>", 
+        "min": "<type 'int'>"
+      }
+    }
+  }, 
+  "monsterlist": {
+    "attackChance": "<type 'int'>", 
+    "attackCost": "<type 'int'>", 
+    "attackDamage": {
+      "max": "<type 'int'>", 
+      "min": "<type 'int'>"
+    }, 
+    "blockChance": "<type 'int'>", 
+    "criticalMultiplier": "<type 'float'>", 
+    "criticalSkill": "<type 'int'>", 
+    "damageResistance": "<type 'int'>", 
+    "deathEffect": {}, 
+    "droplistID": "<type 'unicode'>", 
+    "faction": "<type 'unicode'>", 
+    "hitEffect": {
+      "conditionsSource": {
+        "chance": "<type 'unicode'>", 
+        "condition": "<type 'unicode'>", 
+        "duration": "<type 'int'>", 
+        "magnitude": "<type 'int'>"
+      }, 
+      "conditionsTarget": {
+        "chance": "<type 'unicode'>", 
+        "condition": "<type 'unicode'>", 
+        "duration": "<type 'int'>", 
+        "magnitude": "<type 'int'>"
+      }, 
+      "increaseCurrentHP": {
+        "max": "<type 'int'>", 
+        "min": "<type 'int'>"
+      }
+    }, 
+    "hitReceivedEffect": {
+      "conditionsSource": {
+        "chance": "<type 'unicode'>", 
+        "condition": "<type 'unicode'>", 
+        "duration": "<type 'int'>", 
+        "magnitude": "<type 'int'>"
+      }
+    }, 
+    "iconID": "<type 'unicode'>", 
+    "id": "<type 'unicode'>", 
+    "maxAP": "<type 'int'>", 
+    "maxHP": "<type 'int'>", 
+    "monsterClass": "<type 'unicode'>", 
+    "moveCost": "<type 'int'>", 
+    "movementAggressionType": "<type 'unicode'>", 
+    "name": "<type 'unicode'>", 
+    "phraseID": "<type 'unicode'>", 
+    "size": "<type 'unicode'>", 
+    "spawnGroup": "<type 'unicode'>", 
+    "unique": "<type 'int'>"
+  }, 
+  "questlist": {
+    "id": "<type 'unicode'>", 
+    "name": "<type 'unicode'>", 
+    "showInLog": "<type 'int'>", 
+    "stages": {
+      "finishesQuest": "<type 'int'>", 
+      "logText": "<type 'unicode'>", 
+      "progress": "<type 'int'>", 
+      "rewardExperience": "<type 'int'>"
+    }
+  }
+}
