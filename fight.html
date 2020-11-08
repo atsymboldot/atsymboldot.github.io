@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AT</title>
+<meta charset="utf-8" />
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.css" />
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/vue@latest/dist/vue.js"></script>
+<script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+<script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.js"></script>
+
+
+<script type="module">
+
+const player = {
+  ap: 10,
+  attcost: 5,
+  hp: 25,
+  ac: 60,
+  bc: 0,
+  dr: 0,
+  mindmg: 1,
+  maxdmg: 1,
+};
+
+const monster = {
+  ap: 10,
+  attcost: 9,
+  hp: 5,
+  ac: 90,
+  bc: 0,
+  dr: 0,
+  mindmg: 2,
+  maxdmg: 2,
+  name: "Cave rat",
+};
+
+function roll(s) {
+  return Math.floor(Math.random() * s);
+}
+
+function hit(p, m) {
+  const probability = Math.floor(50 * (1 + 2 / Math.PI * Math.atan((60 - 0 - 50.) / 40)));
+  return roll(100) < probability;
+}
+
+function damage(p, m) {
+  const range = p.maxdmg - p.mindmg + 1;
+  const rawdmg = p.mindmg + roll(range);
+  return rawdmg - m.dr;
+}
+
+function simulate(p, m) {
+  let playerhp = p.hp;
+  let monsterhp = m.hp;
+  let turns = 0;
+  while (playerhp > 0 && monsterhp > 0) {
+    turns++;
+    const pattacks = p.ap / p.attcost;
+    for (let i = 0; i < pattacks; i++) {
+      if (hit(p, m)) {
+        monsterhp -= damage(p, m);
+      }
+    }
+    if (monsterhp <= 0) break;
+    const mattacks = m.ap / m.attcost;
+    for (let i = 0; i < mattacks; i++) {
+      if (hit(m, p)) {
+        playerhp -= damage(m, p);
+      }
+    }
+  }
+  return { turns, playerhp, monsterhp, won: playerhp > 0 };
+}
+
+function stats(p, m, n) {
+  let turnsWinSum = 0, turnsLossSum = 0, playerRemHp = 0, monsterRemHp = 0, winCount = 0;
+  for (let i = 0; i < n; i++) {
+    const res = simulate(p, m);
+    if (res.won) {
+      winCount++;
+      turnsWinSum += res.turns;
+      playerRemHp += res.playerhp;
+    } else {
+      turnsLossSum += res.turns;
+      monsterRemHp += res.monsterhp;
+    }
+  }
+  return { turnsWinSum, turnsLossSum, playerRemHp, monsterRemHp, winCount };
+}
+
+const data = stats(player, monster, 1000);
+
+console.log(data);
+</script>
+</head>
+<body><p>hi</p></body></html>
