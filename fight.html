@@ -13,58 +13,38 @@
 
 <script type="module">
 
-const player = {
-  ap: 10,
-  attcost: 5,
-  hp: 25,
-  ac: 60,
-  bc: 0,
-  dr: 0,
-  mindmg: 1,
-  maxdmg: 1,
-};
-
-const monster = {
-  ap: 10,
-  attcost: 9,
-  hp: 5,
-  ac: 90,
-  bc: 0,
-  dr: 0,
-  mindmg: 2,
-  maxdmg: 2,
-  name: "Cave rat",
-};
+import { AndorsTrailData } from './AndorsTrailData.js';
+const dataUrl = "https://atsymboldot.github.io/data/data.json";
 
 function roll(s) {
   return Math.floor(Math.random() * s);
 }
 
 function hit(p, m) {
-  const probability = Math.floor(50 * (1 + 2 / Math.PI * Math.atan((60 - 0 - 50.) / 40)));
+  const probability = Math.floor(50 * (1 + 2 / Math.PI * Math.atan((p.attackChance - m.blockChance - 50.0) / 40.0)));
   return roll(100) < probability;
 }
 
 function damage(p, m) {
-  const range = p.maxdmg - p.mindmg + 1;
-  const rawdmg = p.mindmg + roll(range);
-  return rawdmg - m.dr;
+  const range = p.attackDamage.max - p.attackDamage.min + 1;
+  const rawdmg = p.attackDamage.min + roll(range);
+  return rawdmg - m.damageResistance;
 }
 
 function simulate(p, m) {
-  let playerhp = p.hp;
-  let monsterhp = m.hp;
+  let playerhp = p.maxHP;
+  let monsterhp = m.maxHP;
   let turns = 0;
   while (playerhp > 0 && monsterhp > 0) {
     turns++;
-    const pattacks = p.ap / p.attcost;
+    const pattacks = p.maxAP / p.attackCost;
     for (let i = 0; i < pattacks; i++) {
       if (hit(p, m)) {
         monsterhp -= damage(p, m);
       }
     }
     if (monsterhp <= 0) break;
-    const mattacks = m.ap / m.attcost;
+    const mattacks = m.maxAP / m.attackCost;
     for (let i = 0; i < mattacks; i++) {
       if (hit(m, p)) {
         playerhp -= damage(m, p);
@@ -90,9 +70,52 @@ function stats(p, m, n) {
   return { turnsWinSum, turnsLossSum, playerRemHp, monsterRemHp, winCount };
 }
 
-const data = stats(player, monster, 1000);
+function defaultPlayer() {
+  return {
+    attackChance: 60,
+    attackDamage: {
+      min: 1,
+      max: 1,
+    },
+    blockChance: 0,
+    damageResistance: 0,
+    criticalSkill: 0,
+    criticalMultiplier: 1,
+    maxHP: 25,
+    maxAP: 10,
+    attackCost: 5,
+    moveCost: 6,
+  };
+}
 
-console.log(data);
+window.onload = async () => {
+  const data = new AndorsTrailData();
+  await data.initialize(dataUrl);
+  new Vue({
+    el: '#app',
+    data() {
+      return {
+        player: defaultPlayer(),
+        monster: defaultPlayer(),
+      };
+    },
+    methods: {
+      calculate() {
+        return stats(this.player, this.monster, 1000);
+      }
+    },
+  });
+  document.getElementById('preload').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+};
 </script>
 </head>
-<body><p>hi</p></body></html>
+<body>
+<div id="preload">Loading, please wait...</div>
+<div id="app" style="display: none;">
+  {{ player }}<br>
+  {{ monster }}<br>
+  {{ calculate() }}<br>
+</div>
+</body>
+</html>
