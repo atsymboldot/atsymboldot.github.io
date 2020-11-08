@@ -24,139 +24,139 @@ const tableHeaders = {
         { key: "attackCost", sortable: true, label: "Attack AP" },
         { key: "moveCost", sortable: true, label: "Move AP" },
         { key: "movementAggressionType", sortable: true, label: "Chase" },
-		{ key: "effects", label: "Hit Effects" },
+        { key: "effects", label: "Hit Effects" },
         { key: "unique", sortable: true, label: "Unique" },
         { key: "metadata", label: "Metadata" },
     ],
-	npc: [
-		{ key: "name", sortable: true, label: "Name" },
+    npc: [
+        { key: "name", sortable: true, label: "Name" },
         { key: "maxAP", sortable: true, label: "AP" },
         { key: "moveCost", sortable: true, label: "Move AP" },
         { key: "unique", sortable: true, label: "Unique" },
         { key: "metadata", label: "Metadata" },
-	],
-	itemlist: [
-		{ key: "name", sortable: true, label: "Name" },
-		{ key: "id", sortable: true, label: "ID" },
-		{ key: "iconID", sortable: true, label: "Icon ID" },
-		{ key: "description", sortable: true, label: "Description" },
-		{ key: "category", sortable: true, label: "Category" },
-		{ key: "displaytype", sortable: true, label: "Display Type" },
-		{ key: "hasManualPrice", sortable: true, label: "Manual Price?" },
-		{ key: "baseMarketCost", sortable: true, label: "Cost" },
-		{ key: "hitEffect", sortable: true, label: "Hit Effect" },
-		{ key: "hitReceivedEffect", sortable: true, label: "Hit Received Effect" },
-		{ key: "equipEffect", sortable: true, label: "Equip Effect" },
-		{ key: "killEffect", sortable: true, label: "Kill Effect" },
-		{ key: "useEffect", sortable: true, label: "Use Effect" },
-	],
+    ],
+    itemlist: [
+        { key: "name", sortable: true, label: "Name" },
+        { key: "id", sortable: true, label: "ID" },
+        { key: "iconID", sortable: true, label: "Icon ID" },
+        { key: "description", sortable: true, label: "Description" },
+        { key: "category", sortable: true, label: "Category" },
+        { key: "displaytype", sortable: true, label: "Display Type" },
+        { key: "hasManualPrice", sortable: true, label: "Manual Price?" },
+        { key: "baseMarketCost", sortable: true, label: "Cost" },
+        { key: "hitEffect", sortable: true, label: "Hit Effect" },
+        { key: "hitReceivedEffect", sortable: true, label: "Hit Received Effect" },
+        { key: "equipEffect", sortable: true, label: "Equip Effect" },
+        { key: "killEffect", sortable: true, label: "Kill Effect" },
+        { key: "useEffect", sortable: true, label: "Use Effect" },
+    ],
 };
 
 class AndorsTrailData {
-	async initialize(url) {
-		this.data = await fetch(url).then(r => r.json());
-		this.normalizeData();
-		this.pruneData();
-	}
+    async initialize(url) {
+        this.data = await fetch(url).then(r => r.json());
+        this.normalizeData();
+        this.pruneData();
+    }
 
-	getMonsters() {
-		return this.data.monsterlist.filter(m => m.attackDamage.max > 0);
-	}
+    getMonsters() {
+        return this.data.monsterlist.filter(m => m.attackDamage.max > 0);
+    }
 
-	getNpcs() {
-		return this.data.monsterlist.filter(m => m.attackDamage.max == 0);
-	}
+    getNpcs() {
+        return this.data.monsterlist.filter(m => m.attackDamage.max == 0);
+    }
 
-	getItems() {
-		return this.data.itemlist;
-	}
+    getItems() {
+        return this.data.itemlist;
+    }
 
-	normalizeData() {
-		if (this.data.monsterlist) {
-			const monsters = this.data.monsterlist;
-			for (let m of this.data.monsterlist) {
-				if (!m.attackChance) m.attackChance = 0;
-				if (!m.criticalSkill) m.criticalSkill = 0;
-				if (!m.criticalMultiplier) m.criticalMultiplier = 0;
-				if (!m.blockChance) m.blockChance = 0;
-				if (!m.damageResistance) m.damageResistance = 0;
-				if (!m.attackDamage) m.attackDamage = { min: 0, max: 0 };
-				if (!m.maxHP) m.maxHP = 1;
-				if (!m.maxAP) m.maxAP = 10;
-				if (!m.attackCost) m.attackCost = 10;
-				if (!m.moveCost) m.moveCost = 10;
-				if (!m.movementAggressionType) m.movementAggressionType = 'none';
-				if (!m.unique) m.unique = 0;
-			}
-		}
-	}
+    normalizeData() {
+        if (this.data.monsterlist) {
+            const monsters = this.data.monsterlist;
+            for (let m of this.data.monsterlist) {
+                if (!m.attackChance) m.attackChance = 0;
+                if (!m.criticalSkill) m.criticalSkill = 0;
+                if (!m.criticalMultiplier) m.criticalMultiplier = 0;
+                if (!m.blockChance) m.blockChance = 0;
+                if (!m.damageResistance) m.damageResistance = 0;
+                if (!m.attackDamage) m.attackDamage = { min: 0, max: 0 };
+                if (!m.maxHP) m.maxHP = 1;
+                if (!m.maxAP) m.maxAP = 10;
+                if (!m.attackCost) m.attackCost = 10;
+                if (!m.moveCost) m.moveCost = 10;
+                if (!m.movementAggressionType) m.movementAggressionType = 'none';
+                if (!m.unique) m.unique = 0;
+            }
+        }
+    }
 
-	pruneData() {
-		this.data.monsterlist = this.data.monsterlist.filter(m => m.damageResistance < 100);
-	}
+    pruneData() {
+        this.data.monsterlist = this.data.monsterlist.filter(m => m.damageResistance < 100);
+    }
 }
 
 window.onload = async () => {
-	const data = new AndorsTrailData();
-	await data.initialize(dataUrl);
+    const data = new AndorsTrailData();
+    await data.initialize(dataUrl);
     new Vue({
         el: '#app',
         data() {
             return {
                 monsterData: data.getMonsters(),
                 monsterFields: tableHeaders.monsterlist,
-				npcData: data.getNpcs(),
-				npcFields: tableHeaders.monsterlist,
-				itemData: data.getItems(),
-				itemFields: tableHeaders.itemlist,
+                npcData: data.getNpcs(),
+                npcFields: tableHeaders.monsterlist,
+                itemData: data.getItems(),
+                itemFields: tableHeaders.itemlist,
             };
         },
         methods: {
             formatCombatStats(item) {
-				if (!item.attackDamage.max) return '-';
+                if (!item.attackDamage.max) return '-';
                 const ac = item.attackChance;
-				const dmg = this.formatRange(item.attackDamage);
-				const crit = (item.criticalSkill > 0 && item.criticalMultiplier != 1) ? ` +${item.criticalSkill}x${item.criticalMultiplier}` : '';
+                const dmg = this.formatRange(item.attackDamage);
+                const crit = (item.criticalSkill > 0 && item.criticalMultiplier != 1) ? ` +${item.criticalSkill}x${item.criticalMultiplier}` : '';
                 const bc = item.blockChance;
                 const dr = item.damageResistance != 0 ? `/${item.damageResistance}` : ''; 
                 return `[${ac} ${dmg}${crit}] [${bc}${dr}]`;
             },
-			formatEffects(item) {
-				const effects = [];
-				if (item.hitEffect) {
-					if (item.hitEffect.increaseCurrentHP) {
-						effects.push(`When hitting player: heal ${this.formatRange(item.hitEffect.increaseCurrentHP)} HP`);
-					}
-					if (item.hitEffect.conditionsTarget) {
-						for (const conditionTarget of item.hitEffect.conditionsTarget) {
-							effects.push('When hitting player: ' + this.formatEffect(conditionTarget) + ' on player');
-						}
-					}
-					if (item.hitEffect.conditionsSource) {
-						for (const conditionSource of item.hitEffect.conditionsSource) {
-							effects.push('When hitting player: ' + this.formatEffect(conditionSource) + ' on self');
-						}
-					}
-				}
-				if (item.hitReceivedEffect) {
-					if (item.hitReceivedEffect.conditionsSource) {
-						for (const conditionSource of item.hitReceivedEffect.conditionsSource) {
-							effects.push('When hit by player: ' + this.formatEffect(conditionSource) + ' on self');
-						}
-					}
-				}
-				return effects.join('; ');
-			},
-			formatEffect(effect) {
-				if (!effect.magnitude) effect.magnitude = 1;
-				if (!effect.duration) effect.duration = 1;
-				return `${effect.chance}% chance of ${effect.magnitude}x ${effect.condition} for ${effect.duration} rounds`;
-			},
-			formatRange(range) {
-				if (!range) return "0";
-				if (range.min == range.max) return `${range.min}`;
-				return `${range.min}-${range.max}`;
-			},
+            formatEffects(item) {
+                const effects = [];
+                if (item.hitEffect) {
+                    if (item.hitEffect.increaseCurrentHP) {
+                        effects.push(`When hitting player: heal ${this.formatRange(item.hitEffect.increaseCurrentHP)} HP`);
+                    }
+                    if (item.hitEffect.conditionsTarget) {
+                        for (const conditionTarget of item.hitEffect.conditionsTarget) {
+                            effects.push('When hitting player: ' + this.formatEffect(conditionTarget) + ' on player');
+                        }
+                    }
+                    if (item.hitEffect.conditionsSource) {
+                        for (const conditionSource of item.hitEffect.conditionsSource) {
+                            effects.push('When hitting player: ' + this.formatEffect(conditionSource) + ' on self');
+                        }
+                    }
+                }
+                if (item.hitReceivedEffect) {
+                    if (item.hitReceivedEffect.conditionsSource) {
+                        for (const conditionSource of item.hitReceivedEffect.conditionsSource) {
+                            effects.push('When hit by player: ' + this.formatEffect(conditionSource) + ' on self');
+                        }
+                    }
+                }
+                return effects.join('; ');
+            },
+            formatEffect(effect) {
+                if (!effect.magnitude) effect.magnitude = 1;
+                if (!effect.duration) effect.duration = 1;
+                return `${effect.chance}% chance of ${effect.magnitude}x ${effect.condition} for ${effect.duration} rounds`;
+            },
+            formatRange(range) {
+                if (!range) return "0";
+                if (range.min == range.max) return `${range.min}`;
+                return `${range.min}-${range.max}`;
+            },
             formatMetadata(item) {
                 const metadata = [];
                 if (item.id) metadata.push(`ID: ${item.id}`);
@@ -180,30 +180,30 @@ window.onload = async () => {
 <div id="preload">Loading, please wait...</div>
 <div id="app" style="display: none;">
     <b-tabs>
-		<b-tab title="Monsters">
-			<p>&nbsp;</p>
-			<b-table small striped hover responsive sticky-header bordered :items="monsterData" :fields="monsterFields" style="max-height: 600px; font-size: 0.75em;">
-				<template v-slot:cell(combat)="data">{{ formatCombatStats(data.item) }}</template>
-				<template v-slot:cell(metadata)="data">{{ formatMetadata(data.item) }}</template>
-				<template v-slot:cell(effects)="data">{{ formatEffects(data.item) }}</template>
-				<template v-slot:cell()="data">{{ data.value }}</template>
-			</b-table>
-		</b-tab>
-		<b-tab title="NPCs">
-			<p>&nbsp;</p>
-			<b-table small striped hover responsive sticky-header bordered :items="npcData" :fields="npcFields" style="max-height: 600px; font-size: 0.75em;">
-				<template v-slot:cell(combat)="data">{{ formatCombatStats(data.item) }}</template>
-				<template v-slot:cell(metadata)="data">{{ formatMetadata(data.item) }}</template>
-				<template v-slot:cell(effects)="data">{{ formatEffects(data.item) }}</template>
-				<template v-slot:cell()="data">{{ data.value }}</template>
-			</b-table>
-		</b-tab>
-		<b-tab title="Items">
-			<p>&nbsp;</p>
-			<b-table small striped hover responsive sticky-header bordered :items="itemData" :fields="itemFields" style="max-height: 600px; font-size: 0.75em;">
-				<template v-slot:cell()="data">{{ data.value }}</template>
-			</b-table>
-		</b-tab>
+        <b-tab title="Monsters">
+            <p>&nbsp;</p>
+            <b-table small striped hover responsive sticky-header bordered :items="monsterData" :fields="monsterFields" style="max-height: 600px; font-size: 0.75em;">
+                <template v-slot:cell(combat)="data">{{ formatCombatStats(data.item) }}</template>
+                <template v-slot:cell(metadata)="data">{{ formatMetadata(data.item) }}</template>
+                <template v-slot:cell(effects)="data">{{ formatEffects(data.item) }}</template>
+                <template v-slot:cell()="data">{{ data.value }}</template>
+            </b-table>
+        </b-tab>
+        <b-tab title="NPCs">
+            <p>&nbsp;</p>
+            <b-table small striped hover responsive sticky-header bordered :items="npcData" :fields="npcFields" style="max-height: 600px; font-size: 0.75em;">
+                <template v-slot:cell(combat)="data">{{ formatCombatStats(data.item) }}</template>
+                <template v-slot:cell(metadata)="data">{{ formatMetadata(data.item) }}</template>
+                <template v-slot:cell(effects)="data">{{ formatEffects(data.item) }}</template>
+                <template v-slot:cell()="data">{{ data.value }}</template>
+            </b-table>
+        </b-tab>
+        <b-tab title="Items">
+            <p>&nbsp;</p>
+            <b-table small striped hover responsive sticky-header bordered :items="itemData" :fields="itemFields" style="max-height: 600px; font-size: 0.75em;">
+                <template v-slot:cell()="data">{{ data.value }}</template>
+            </b-table>
+        </b-tab>
     </b-tabs>
 </div>
 
