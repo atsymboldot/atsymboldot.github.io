@@ -16,8 +16,8 @@
 </style>
 <script type="module">
 
-//import { AndorsTrailData } from './AndorsTrailData.js';
-//const dataUrl = "https://atsymboldot.github.io/data/data.json";
+import { AndorsTrailData } from './AndorsTrailData.js';
+const dataUrl = "https://atsymboldot.github.io/data/data.json";
 
 function roll(s) {
   return Math.floor(Math.random() * s);
@@ -97,8 +97,8 @@ function defaultPlayer() {
 }
 
 window.onload = async () => {
-  //const data = new AndorsTrailData();
-  //await data.initialize(dataUrl);
+  const data = new AndorsTrailData();
+  await data.initialize(dataUrl);
   new Vue({
     el: '#app',
     data() {
@@ -108,7 +108,24 @@ window.onload = async () => {
         iterations: 1000,
         results: {},
         precision: 2,
+        presetMonster: {},
+        monsterData: this.formatMonsters(data.getMonsters()),
       };
+    },
+    watch: {
+      presetMonster(m) {
+        this.monster.attackChance = m.attackChance;
+        this.monster.attackDamage.min = m.attackDamage.min;
+        this.monster.attackDamage.max = m.attackDamage.max;
+        this.monster.blockChance = m.blockChance;
+        this.monster.damageResistance = m.damageResistance;
+        this.monster.criticalSkill = m.criticalSkill;
+        this.monster.criticalMultiplier = m.criticalMultiplier;
+        this.monster.maxHP = m.maxHP;
+        this.monster.maxAP = m.maxAP;
+        this.monster.attackCost = m.attackCost;
+        this.monster.moveCost = m.moveCost;
+      }
     },
     methods: {
       calculate() {
@@ -133,6 +150,9 @@ window.onload = async () => {
       monsterHpLeft() {
         const results = this.results;
         return results.lossCount ? `${(results.monsterRemHp / results.lossCount).toFixed(this.precision)}` : "-";
+      },
+      formatMonsters(mlist) {
+        return mlist.map(m => ({ value: m, text: `${m.name} (${m.id})` }));
       },
     },
   });
@@ -208,6 +228,10 @@ window.onload = async () => {
       <b-form-group label-cols="6" label-size="sm" label="Damage resistance">
         <b-form-input number v-model="monster.damageResistance" size="sm"></b-form-input>
       </b-form-group>
+      <div>
+        Monster list:
+        <b-form-select v-model="presetMonster" :options="monsterData" :select-size="5" size="sm"></b-form-select>
+      </div>
     </b-card>
     <b-card title="Outcome stats">
       <b-form-group label-cols="6" label-size="sm" label="Iterations">
