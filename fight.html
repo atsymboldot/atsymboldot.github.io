@@ -13,8 +13,8 @@
 
 <script type="module">
 
-import { AndorsTrailData } from './AndorsTrailData.js';
-const dataUrl = "https://atsymboldot.github.io/data/data.json";
+//import { AndorsTrailData } from './AndorsTrailData.js';
+//const dataUrl = "https://atsymboldot.github.io/data/data.json";
 
 function roll(s) {
   return Math.floor(Math.random() * s);
@@ -55,7 +55,7 @@ function simulate(p, m) {
 }
 
 function stats(p, m, n) {
-  let turnsWinSum = 0, turnsLossSum = 0, playerRemHp = 0, monsterRemHp = 0, winCount = 0;
+  let turnsWinSum = 0, turnsLossSum = 0, playerRemHp = 0, monsterRemHp = 0, winCount = 0, lossCount = 0;
   for (let i = 0; i < n; i++) {
     const res = simulate(p, m);
     if (res.won) {
@@ -63,11 +63,12 @@ function stats(p, m, n) {
       turnsWinSum += res.turns;
       playerRemHp += res.playerhp;
     } else {
+      lossCount++;
       turnsLossSum += res.turns;
       monsterRemHp += res.monsterhp;
     }
   }
-  return { turnsWinSum, turnsLossSum, playerRemHp, monsterRemHp, winCount };
+  return { turnsWinSum, turnsLossSum, playerRemHp, monsterRemHp, winCount, lossCount, n };
 }
 
 function defaultPlayer() {
@@ -89,20 +90,43 @@ function defaultPlayer() {
 }
 
 window.onload = async () => {
-  const data = new AndorsTrailData();
-  await data.initialize(dataUrl);
+  //const data = new AndorsTrailData();
+  //await data.initialize(dataUrl);
   new Vue({
     el: '#app',
     data() {
       return {
         player: defaultPlayer(),
         monster: defaultPlayer(),
+        iterations: 1000,
+        results: {},
+        precision: 2,
       };
     },
     methods: {
       calculate() {
-        return stats(this.player, this.monster, 1000);
-      }
+        this.results = stats(this.player, this.monster, this.iterations);
+      },
+      winRate() {
+        const results = this.results;
+        return results.n ? `${(100 * results.winCount / results.n).toFixed(this.precision)}%` : "-";
+      },
+      turnsToWin() {
+        const results = this.results;
+        return results.winCount ? `${(results.turnsWinSum / results.winCount).toFixed(this.precision)}` : "-";
+      },
+      turnsToLose() {
+        const results = this.results;
+        return results.lossCount ? `${(results.turnsLossSum / results.lossCount).toFixed(this.precision)}` : "-";
+      },
+      playerHpLeft() {
+        const results = this.results;
+        return results.winCount ? `${(results.playerRemHp / results.winCount).toFixed(this.precision)}` : "-";
+      },
+      monsterHpLeft() {
+        const results = this.results;
+        return results.lossCount ? `${(results.monsterRemHp / results.lossCount).toFixed(this.precision)}` : "-";
+      },
     },
   });
   document.getElementById('preload').style.display = 'none';
@@ -113,9 +137,74 @@ window.onload = async () => {
 <body>
 <div id="preload">Loading, please wait...</div>
 <div id="app" style="display: none;">
-  {{ player }}<br>
-  {{ monster }}<br>
-  {{ calculate() }}<br>
+  <b-card-group deck>
+    <b-card title="Player stats">
+      <b-form-group label-cols="6" label-size="sm" label="Max HP">
+        <b-form-input number v-model="player.maxHP" size="sm"></b-form-input>
+      </b-form-group>
+      <b-form-group label-cols="6" label-size="sm" label="Max AP">
+        <b-form-input number v-model="player.maxAP" size="sm"></b-form-input>
+      </b-form-group>
+      <b-form-group label-cols="6" label-size="sm" label="Attack cost">
+        <b-form-input number v-model="player.attackCost" size="sm"></b-form-input>
+      </b-form-group>
+      <b-form-group label-cols="6" label-size="sm" label="Attack chance">
+        <b-form-input number v-model="player.attackChance" size="sm"></b-form-input>
+      </b-form-group>
+      <b-form-group label-cols="6" label-size="sm" label="Min damage">
+        <b-form-input number v-model="player.attackDamage.min" size="sm"></b-form-input>
+      </b-form-group>
+      <b-form-group label-cols="6" label-size="sm" label="Max damage">
+        <b-form-input number v-model="player.attackDamage.max" size="sm"></b-form-input>
+      </b-form-group>
+      <b-form-group label-cols="6" label-size="sm" label="Block chance">
+        <b-form-input number v-model="player.blockChance" size="sm"></b-form-input>
+      </b-form-group>
+      <b-form-group label-cols="6" label-size="sm" label="Damage resistance">
+        <b-form-input number v-model="player.damageResistance" size="sm"></b-form-input>
+      </b-form-group>
+    </b-card>
+    <b-card title="Monster stats">
+      <b-form-group label-cols="6" label-size="sm" label="Max HP">
+        <b-form-input number v-model="monster.maxHP" size="sm"></b-form-input>
+      </b-form-group>
+      <b-form-group label-cols="6" label-size="sm" label="Max AP">
+        <b-form-input number v-model="monster.maxAP" size="sm"></b-form-input>
+      </b-form-group>
+      <b-form-group label-cols="6" label-size="sm" label="Attack cost">
+        <b-form-input number v-model="monster.attackCost" size="sm"></b-form-input>
+      </b-form-group>
+      <b-form-group label-cols="6" label-size="sm" label="Attack chance">
+        <b-form-input number v-model="monster.attackChance" size="sm"></b-form-input>
+      </b-form-group>
+      <b-form-group label-cols="6" label-size="sm" label="Min damage">
+        <b-form-input number v-model="monster.attackDamage.min" size="sm"></b-form-input>
+      </b-form-group>
+      <b-form-group label-cols="6" label-size="sm" label="Max damage">
+        <b-form-input number v-model="monster.attackDamage.max" size="sm"></b-form-input>
+      </b-form-group>
+      <b-form-group label-cols="6" label-size="sm" label="Block chance">
+        <b-form-input number v-model="monster.blockChance" size="sm"></b-form-input>
+      </b-form-group>
+      <b-form-group label-cols="6" label-size="sm" label="Damage resistance">
+        <b-form-input number v-model="monster.damageResistance" size="sm"></b-form-input>
+      </b-form-group>
+    </b-card>
+    <b-card title="Outcome stats">
+      <b-form-group label-cols="6" label-size="sm" label="Iterations">
+        <b-form-input number v-model="iterations" size="sm"></b-form-input>
+      </b-form-group>
+      <div v-if="results.n">
+        Win rate: {{ winRate() }}<br>
+        Avg turns to win: {{ turnsToWin() }}<br>
+        Avg player HP left in wins: {{ playerHpLeft() }}<br>
+        Avg turns to lose: {{ turnsToLose() }}<br>
+        Avg enemy HP left in losses: {{ monsterHpLeft() }}<br>
+      </div>
+      <div v-else>Nothing yet - calculate something!</div>
+      <b-button class="my-3" variant="success" @click="calculate">Recalculate</b-button>
+    </b-card>
+  </b-card-group>
 </div>
 </body>
 </html>
