@@ -37,14 +37,14 @@ function simulate(p, m) {
   let turns = 0;
   while (playerhp > 0 && monsterhp > 0) {
     turns++;
-    const pattacks = p.maxAP / p.attackCost;
+    const pattacks = Math.floor(p.maxAP / p.attackCost);
     for (let i = 0; i < pattacks; i++) {
       if (hit(p, m)) {
         monsterhp -= damage(p, m);
       }
     }
     if (monsterhp <= 0) break;
-    const mattacks = m.maxAP / m.attackCost;
+    const mattacks = Math.floor(m.maxAP / m.attackCost);
     for (let i = 0; i < mattacks; i++) {
       if (hit(m, p)) {
         playerhp -= damage(m, p);
