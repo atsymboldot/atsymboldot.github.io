@@ -35,7 +35,7 @@ function damage(p, m) {
   if (roll(100) < critProbability) {
     rawdmg *= p.criticalMultiplier;
   }
-  return rawdmg - m.damageResistance;
+  return Math.max(rawdmg - m.damageResistance, 0);
 }
 
 function simulate(p, m) {
