@@ -114,6 +114,7 @@ window.onload = async () => {
         monster: defaultPlayer(),
         iterations: 1000,
         results: {},
+        allResults: {},
         precision: 2,
         presetMonster: {},
         monsterData: this.formatMonsters(data.getMonsters()),
@@ -137,6 +138,13 @@ window.onload = async () => {
     methods: {
       calculate() {
         this.results = stats(this.player, this.monster, this.iterations);
+      },
+      calculateAll() {
+        this.allResults = {};
+        for (const monster of this.monsterData) {
+          this.allResults[monster.text] = stats(this.player, monster.value, 100);
+        }
+        this.$forceUpdate();
       },
       winRate() {
         const results = this.results;
@@ -254,6 +262,13 @@ window.onload = async () => {
       </div>
       <div v-else>Nothing yet - calculate something!</div>
       <b-button class="my-3" variant="success" @click="calculate">Recalculate</b-button>
+    </b-card>
+    <b-card title="Full bestiary">
+      Warning: takes a long time!<br>
+      <b-button class="my-3" variant="success" @click="calculateAll">Recalculate</b-button>
+      <ul>
+        <li v-for="(result, monster) in allResults">{{ monster }}: {{ result.winCount * 1e2 / result.n }}% win chance</li>
+      </ul>
     </b-card>
   </b-card-group>
 </div>
