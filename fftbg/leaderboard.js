@@ -31,7 +31,8 @@ const seasons = {
     10: 6544,
     11: 7419,
     12: 8541,
-    13: 99999,
+    13: 9559,
+    14: 9999999, // must exist to define (inferred) end of prior season
 };
 
 window.onload = () => {
@@ -73,6 +74,7 @@ window.onload = () => {
                     {text: "Season 10", value: 10},
                     {text: "Season 11", value: 11},
                     {text: "Season 12", value: 12},
+                    {text: "Season 13", value: 13},
                 ],
                 rawData: [],
             };
@@ -95,8 +97,21 @@ window.onload = () => {
                             }
                         });
                         return ret;
-                    }).filter(x => x.count >= 5).sort((a, b) => a.count != b.count ? (a.count > b.count ? -1 : 1) : (a.name < b.name) ? -1 : 1);
+                    }).filter(x => x.count >= 5 || (x.count >= 1 && this.seasonMode == 13)).sort((a, b) => a.count != b.count ? (a.count > b.count ? -1 : 1) : (a.name < b.name) ? -1 : 1);
                 }
+            },
+            mostRecentChamp() {
+                let mostRecent = 0;
+                for (const player of this.rawData) {
+                    for (const obj of Object.values(player)) {
+                        if (Array.isArray(obj)) {
+                            for (const champ of obj) {
+                                mostRecent = Math.max(mostRecent, champ[0]);
+                            }
+                        }
+                    }
+                }
+                return mostRecent;
             },
             tableData() {
                 if (this.columnMode == 'default') {
