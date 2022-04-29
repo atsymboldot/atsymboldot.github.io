@@ -32,7 +32,8 @@ const seasons = {
     11: 7419,
     12: 8541,
     13: 9559,
-    14: 9999999, // must exist to define (inferred) end of prior season
+    14: 10533,
+    15: 999999, // must exist to define (inferred) end of prior season
 };
 
 window.onload = () => {
@@ -75,6 +76,7 @@ window.onload = () => {
                     {text: "Season 11", value: 11},
                     {text: "Season 12", value: 12},
                     {text: "Season 13", value: 13},
+                    {text: "Season 14", value: 14},
                 ],
                 rawData: [],
             };
@@ -97,7 +99,7 @@ window.onload = () => {
                             }
                         });
                         return ret;
-                    }).filter(x => x.count >= 5 || (x.count >= 1 && this.seasonMode == 13)).sort((a, b) => a.count != b.count ? (a.count > b.count ? -1 : 1) : (a.name < b.name) ? -1 : 1);
+                    }).filter(x => x.count >= 5 || (this.seasonMode == 14 && x.count >= 2)).sort((a, b) => a.count != b.count ? (a.count > b.count ? -1 : 1) : (a.name < b.name) ? -1 : 1);
                 }
             },
             mostRecentChamp() {
@@ -178,8 +180,13 @@ window.onload = () => {
             variantForKey(k) {
                 return classes.indexOf(k) <= 19 ? "secondary" : elites.includes(k) ? "primary" : strongs.includes(k) ? "success" : "light";
             },
-            cellTooltip(data) {
-                return `First champed #${data[0][0]}; ${data.length} time${data.length == 1 ? '' : 's'} total`;
+            cellTooltip(dataholder) {
+                const data = dataholder.unformatted;
+                if (data.length > 0) {
+                    return `First champed #${data[0][0]}; ${data.length} time${data.length == 1 ? '' : 's'} total`;
+                } else {
+                    return `No champs with ${dataholder.field.label}`;
+                }
             },
             genderDisplay(data) {
                 if (gendered.includes(data.field.label)) {

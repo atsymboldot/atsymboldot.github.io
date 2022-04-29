@@ -69,7 +69,7 @@
                     </template>
                     <template #cell()="data">
                         <div v-if="data.unformatted.length > 0">
-                            <span class="win" :title="cellTooltip(data.unformatted)">
+                            <span class="win" :title="cellTooltip(data)">
                                 <template v-if="displayMode == 'gender'">
                                     {{ genderDisplay(data) }}
                                 </template>
@@ -85,7 +85,7 @@
                             </span>
                         </div>
                         <div v-else>
-                            <span class="fail">×</span>
+                            <span class="fail" :title="cellTooltip(data)">×</span>
                         </div>
                     </template>
                 </b-table>

@@ -22,7 +22,7 @@
                             } else if (key == 'count') {
                                 output.push(`Classes: ${row[key]}`);
                             } else {
-                                output.push(`${key.padEnd(keyPadLevel, ' ')}: Champed ${(''+row[key].length).padStart(3, ' ')} time${row[key].length == 1 ? '. ' : 's.'}  IDs: ${row[key].map(x => (''+x[0]).padStart(4, ' ')).join(", ")}`);
+                                output.push(`${key.padEnd(keyPadLevel, ' ')}: Champed ${(''+row[key].length).padStart(3, ' ')} time${row[key].length == 1 ? '. ' : 's.'}  IDs: ${row[key].map(x => (''+x[0]).padStart(5, ' ')).join(", ")}`);
                             }
                         }
                         document.getElementById("output").innerText = output.join("\n");
