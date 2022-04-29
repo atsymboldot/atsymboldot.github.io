@@ -176,7 +176,7 @@ window.onload = () => {
                 return `images/${x}` + (classes.indexOf(x) < 0 || classes.indexOf(x) > 19 ? "" : x == "Dancer" ? "F" : x == "Bard" ? "M" : Math.random() < 0.5 ? "F" : "M") + ".gif";
             },
             variantForKey(k) {
-                return classes.indexOf(k) <= 19 ? "secondary" : elites.includes(k) ? "primary" : strongs.includes(k) ? "success" : "";
+                return classes.indexOf(k) <= 19 ? "secondary" : elites.includes(k) ? "primary" : strongs.includes(k) ? "success" : "light";
             },
             cellTooltip(data) {
                 return `First champed #${data[0][0]}; ${data.length} time${data.length == 1 ? '' : 's'} total`;
