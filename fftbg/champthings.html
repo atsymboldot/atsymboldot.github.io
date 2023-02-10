@@ -5,7 +5,7 @@
         <title>FFTBG champ classes - text</title>
         <script>
             window.onload = async () => {
-                const data = await (await fetch("dataslug.json")).json();
+                const data = await (await fetch("dataslug.json", {cache: "no-store"})).json();
                 const startIndex = document.URL.indexOf("?");
                 if (startIndex < 0) return;
                 const querystring = document.URL.substring(startIndex);
