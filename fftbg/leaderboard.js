@@ -139,7 +139,7 @@ window.onload = () => {
                             }
                         });
                         return ret;
-                    }).filter(x => x.count >= 5 || (this.seasonMode == 16/* update for new season */ && x.count >= 1)).sort(champComparator);
+                    }).filter(x => x.count >= 5 || (this.seasonMode == 16/* update for new season */ && x.count >= 3)).sort(champComparator);
                 }
             },
             mostRecentChamp() {
