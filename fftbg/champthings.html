@@ -11,15 +11,20 @@
                 const querystring = document.URL.substring(startIndex);
                 const param = new URLSearchParams(querystring);
                 const user = param.get("user");
-                if (!user) return;
+                if (!user) {
+                    document.getElementById("output").innerText = "Missing user parameter";
+                    return;
+                }
+                let done = false;
                 for (const row of data) {
-                    if (row.name == user) {
+                    if (row.name.toLowerCase() == user.toLowerCase()) {
+                        done = true;
                         const output = [];
                         const keyPadLevel = Math.max(...Object.keys(row).map(s => s.length));
                         const champCount = Object.keys(row).filter(x => x != 'name' && x != 'count').map(x => row[x].length).reduce((a, b) => a + b, 0);
                         for (const key of Object.keys(row)) {
                             if (key == 'name') {
-                                output.push(`User: ${user}`);
+                                output.push(`User: ${row.name}`);
                             } else if (key == 'count') {
                                 output.push(`Classes: ${row[key]}; Champs: ${champCount}`);
                             } else {
@@ -30,10 +35,13 @@
                         break;
                     }
                 }
+                if (!done) {
+                    document.getElementById("output").innerText = `Cannot find user ${user}`;
+                }
             }
         </script>
     </head>
     <body>
-        <pre id="output"></pre>
+        <pre id="output">Loading</pre>
     </body>
 </html>

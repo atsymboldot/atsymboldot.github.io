@@ -11,7 +11,7 @@
 
         <script src="leaderboard.js"></script>
         <style>
-            .table tr:hover {
+            .table tr:hover, .table tr.b-table-row-selected {
                 filter: brightness(80%);
             }
 
@@ -48,7 +48,7 @@
                     </b-dropdown>
                     <span>Updated as of champ #<strong>{{ mostRecentChamp }}</strong></span>
                 </b-form-group>
-                <b-table small borderless sticky-header="85vh" :items="tableData" :fields="tableColumns">
+                <b-table selectable selected-variant="" small borderless sticky-header="85vh" :items="tableData" :fields="tableColumns">
                     <template #table-colgroup="scope">
                         <col v-for="field in scope.fields" :key="field.key" :variant="variantForKey(field.key)">
                     </template>
