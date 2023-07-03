@@ -91,7 +91,7 @@ window.onload = () => {
                 columnMode: getParams.column ? getParams.column : 'default',
                 columnOptions: [
                     {text: "Default", value: 'default'},
-                    {text: "Gendered humans", value: 'gender'},
+                    {text: "Gendered", value: 'gender'},
                     {text: "Monsters", value: 'monster'},
                 ],
                 displayMode: getParams.display ? getParams.display : 'default',
@@ -210,11 +210,31 @@ window.onload = () => {
             },
         },
         watch: {
+            columnMode(x) {
+                this.$refs.columnDropdown.hide(true);
+            },
+            displayMode(x) {
+                this.$refs.displayDropdown.hide(true);
+            },
             seasonMode(x) {
                 this.$refs.seasonDropdown.hide(true);
             },
         },
         methods: {
+            valueToText(x, opts) {
+                for (const opt of opts) {
+                    if (x == opt.value) {
+                        return opt.text;
+                    }
+                }
+                return "Default";
+            },
+            columnToDisplay(x) {
+                return this.valueToText(x, this.columnOptions);
+            },
+            displayToDisplay(x) {
+                return this.valueToText(x, this.displayOptions);
+            },
             seasonToDisplay(x) {
                 return x == 0 ? "All-time" : `Season ${x}`;
             },

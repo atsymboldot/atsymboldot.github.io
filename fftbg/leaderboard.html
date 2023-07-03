@@ -9,8 +9,12 @@
         <script src="//unpkg.com/vue@2.*/dist/vue.js"></script>
         <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
 
-        <script src="leaderboard.js"></script>
+        <script src="leaderboard.js?v=2"></script>
         <style>
+            #app {
+                height: 100vh;
+            }
+
             .table tr:hover, .table tr.b-table-row-selected {
                 filter: brightness(80%);
             }
@@ -39,16 +43,18 @@
             <div v-if="loading">Loading</div>
             <div v-else>
                 <b-form-group class="mb-1">
-                    Columns:
-                    <b-form-radio-group buttons size="sm" v-model="columnMode" :options="columnOptions"></b-form-radio-group>
-                    Values:
-                    <b-form-radio-group buttons size="sm" v-model="displayMode" :options="displayOptions"></b-form-radio-group>
+                    <span>As of champ #<strong>{{ mostRecentChamp }}</strong> &mdash;</span>
+                    Columns: <b-dropdown :text="columnToDisplay(columnMode)" size="sm" ref="columnDropdown">
+                            <b-form-radio-group buttons stacked class="w-100" size="sm" v-model="columnMode" :options="columnOptions"></b-form-radio-group>
+                    </b-dropdown>
+                    Values: <b-dropdown :text="displayToDisplay(displayMode)" size="sm" ref="displayDropdown">
+                            <b-form-radio-group buttons stacked class="w-100" size="sm" v-model="displayMode" :options="displayOptions"></b-form-radio-group>
+                    </b-dropdown>
                     Season: <b-dropdown :text="seasonToDisplay(seasonMode)" size="sm" ref="seasonDropdown">
                             <b-form-radio-group buttons stacked class="w-100" size="sm" v-model="seasonMode" :options="seasonOptions"></b-form-radio-group>
                     </b-dropdown>
-                    <span>Updated as of champ #<strong>{{ mostRecentChamp }}</strong></span>
                 </b-form-group>
-                <b-table selectable selected-variant="" small borderless sticky-header="85vh" :items="tableData" :fields="tableColumns">
+                <b-table selectable selected-variant="" small borderless sticky-header="calc(100vh - 60px)" :items="tableData" :fields="tableColumns">
                     <template #table-colgroup="scope">
                         <col v-for="field in scope.fields" :key="field.key" :variant="variantForKey(field.key)">
                     </template>
@@ -62,7 +68,7 @@
                         <img :src="classToImage(data.column)" :alt="data.column" :title="data.column">
                     </template>
                     <template #cell(name)="data">
-                        <div class="text-nowrap"><a :href="'champthings?user=' + data.value">{{ data.value }}</a></div>
+                        <div class="text-nowrap"><a :href="'champthings.html?user=' + data.value">{{ data.value }}</a></div>
                     </template>
                     <template #cell(count)="data">
                         {{ data.value }}
