@@ -50,7 +50,8 @@ const seasons = {
     15: 11590,
     16: 12723,
     17: 13983,
-    18: 999999, // must exist to define (inferred) end of prior season
+    18: 15170,
+    19: 999999, // must exist to define (inferred) end of prior season
 };
 
 const champComparator = (a, b) => {
@@ -81,7 +82,7 @@ window.onload = () => {
     new Vue({
         el: "#app",
         async created() {
-            this.rawData = await (await fetch("dataslug.json", {cache: "no-store"})).json();
+            this.rawData = await (await fetch("dataslug.json", {cache: "no-cache"})).json();
             this.rawData.sort(champComparator);
             this.loading = 0;
         },
@@ -121,6 +122,7 @@ window.onload = () => {
                     {text: "Season 15", value: 15},
                     {text: "Season 16", value: 16},
                     {text: "Season 17", value: 17},
+                    {text: "Season 18", value: 18},
                 ],
                 rawData: [],
             };
@@ -143,7 +145,7 @@ window.onload = () => {
                             }
                         });
                         return ret;
-                    }).filter(x => x.count >= 5 || (this.seasonMode == 17/* update for new season */ && x.count >= 2)).sort(champComparator);
+                    }).filter(x => x.count >= 5 || (this.seasonMode == 18/* update for new season */ && x.count >= 1)).sort(champComparator);
                 }
             },
             mostRecentChamp() {
