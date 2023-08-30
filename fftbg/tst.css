@@ -16,8 +16,8 @@ tfoot { position: sticky; bottom: 0; line-height: 0; }
 a { text-decoration: none; }
 img { max-width: 20px; }
 table { border-collapse: collapse; width: 100% }
-tr:hover { filter: brightness(80%); }
-tr:nth-child(even) { font-weight: bolder; }
+tr:hover { filter: brightness(80%) !important; }
+tr:nth-child(even) { filter: brightness(90%); }
 
 .human { background-color: #d6d8db; }
 .common { background-color: #fdfdfe; }
