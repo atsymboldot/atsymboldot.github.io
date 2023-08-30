@@ -71,6 +71,18 @@ const champComparator = (a, b) => {
     return mostRecentA - mostRecentB;
 };
 
+const generateHeaderHtml = (displayClasses) => {
+    const html = [];
+    html.push('<tr>');
+    html.push('<th>Name</th>');
+    html.push('<th>#</th>');
+    for (const c of displayClasses) {
+        html.push(`<th class="${getClassType(c)}"><img src="images/${c}${generateGender(c)}.gif"></th>`);
+    }
+    html.push('</tr>');
+    return html.join('');
+}
+
 const renderTable = (column) => {
     const html = [];
 
@@ -78,21 +90,22 @@ const renderTable = (column) => {
     // TODO: handle 'gendered'
     // TODO: fix sorting for non-default views
 
-    // table header
     html.push('<table>');
-    html.push('<thead><tr>');
-    html.push('<th>Name</th>');
-    html.push('<th>#</th>');
-    for (const c of displayClasses) {
-        html.push(`<th class="${getClassType(c)}"><img src="images/${c}${generateGender(c)}.gif"></th>`);
-    }
-    html.push('</tr></thead>');
+
+    // table header/footer
+    const headerHtml = generateHeaderHtml(displayClasses);
+    html.push('<thead>');
+    html.push(headerHtml);
+    html.push('</thead>');
+    html.push('<tfoot>');
+    html.push(headerHtml);
+    html.push('</tfoot>');
 
     // table body
     html.push('<tbody>');
     for (const row of data) {
         html.push('<tr>');
-        html.push(`<td><a href="champthings.html?user=${row.name}">${row.name}</a></td>`);
+        html.push(`<th><a href="champthings.html?user=${row.name}">${row.name}</a></th>`);
         let count = 0;
         for (const c of displayClasses) {
             if (c in row && row[c].length > 0) {
