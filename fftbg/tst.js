@@ -1,4 +1,5 @@
 /*
+ *  - prevent menu from scrolling out of view when table scrolls
  *  - add selectors for different views (seasonal, value display)
  *  - persistently selectable rows
  *  - handle direct GET links
