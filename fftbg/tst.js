@@ -95,12 +95,8 @@ const renderTable = (column) => {
 
     // table header/footer
     const headerHtml = generateHeaderHtml(displayClasses);
-    html.push('<thead>');
-    html.push(headerHtml);
-    html.push('</thead>');
-    html.push('<tfoot>');
-    html.push(headerHtml);
-    html.push('</tfoot>');
+    html.push(`<thead>${headerHtml}</thead>`);
+    html.push(`<tfoot>${headerHtml}</tfoot>`);
 
     // table body
     html.push('<tbody>');
@@ -126,6 +122,7 @@ const renderTable = (column) => {
         html.push('</tr>');
     }
     html.push('</tbody>');
+
     html.push('</table>');
 
     document.getElementById('tableOutput').innerHTML = html.join('');

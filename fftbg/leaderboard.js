@@ -51,7 +51,10 @@ const seasons = {
     16: 12723,
     17: 13983,
     18: 15170,
-    19: 999999, // must exist to define (inferred) end of prior season
+    19: 16164,
+    20: 17212,
+    21: 999999, // must exist to define (inferred) end of prior season
+
 };
 
 const champComparator = (a, b) => {
@@ -123,6 +126,8 @@ window.onload = () => {
                     {text: "Season 16", value: 16},
                     {text: "Season 17", value: 17},
                     {text: "Season 18", value: 18},
+                    {text: "Season 19", value: 19},
+                    {text: "Season 20", value: 20},
                 ],
                 rawData: [],
             };
@@ -145,7 +150,7 @@ window.onload = () => {
                             }
                         });
                         return ret;
-                    }).filter(x => x.count >= 5 || (this.seasonMode == 18/* update for new season */ && x.count >= 1)).sort(champComparator);
+                    }).filter(x => x.count >= 5 || (this.seasonMode == 20/* update for new season */ && x.count >= 1)).sort(champComparator);
                 }
             },
             mostRecentChamp() {
