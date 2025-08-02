@@ -55,7 +55,9 @@ const seasons = {
     20: 17212,
     21: 18321,
     22: 19536,
-    23: 999999, // must exist to define (inferred) end of prior season
+    23: 20732,
+    24: 21796,
+    25: 999999, // must exist to define (inferred) end of prior season
 
 };
 
@@ -110,6 +112,8 @@ window.onload = () => {
                 seasonMode: getParams.season ? parseInt(getParams.season) : 0,
                 seasonOptions: [
                     {text: "All-time", value: 0},
+                    {text: "Season 24", value: 24},
+                    {text: "Season 23", value: 23},
                     {text: "Season 22", value: 22},
                     {text: "Season 21", value: 21},
                     {text: "Season 20", value: 20},
@@ -154,7 +158,7 @@ window.onload = () => {
                             }
                         });
                         return ret;
-                    }).filter(x => x.count >= 5 || (this.seasonMode == 22/* update for new season */ && x.count >= 1)).sort(champComparator);
+                    }).filter(x => x.count >= 5 || (this.seasonMode == 24/* update for new season */ && x.count >= 1)).sort(champComparator);
                 }
             },
             mostRecentChamp() {
