@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>FFTBG champ classes</title>
+        <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap@4.*/dist/css/bootstrap.css" />
+        <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
+        <script src="//polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver" crossorigin="anonymous"></script>
+        <script src="//unpkg.com/vue@2.*/dist/vue.js"></script>
+        <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+
+        <script src="leaderboard.js"></script>
+        <style>
+            .table td, .table th {
+                padding: 0px !important;
+                text-align: center;
+            }
+
+            img {
+                max-width: 20px;
+            }
+
+            .fail {
+                color: red;
+            }
+
+            .win {
+                font-weight: bold;
+                color: darkgreen;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <div v-if="loading">Loading</div>
+            <div v-else>
+                <b-form-group class="mb-1">
+                    <b-form-radio-group buttons v-model="displayMode" :options="displayOptions"></b-form-radio-group>
+                </b-form-group>
+                <b-table small borderless striped hover sticky-header="85vh" :items="tableData" :fields="tableColumns">
+                    <template #table-colgroup="scope">
+                        <col v-for="field in scope.fields" :key="field.key" :variant="variantForKey(field.key)">
+                    </template>
+                    <template #head(name)="data">
+                        {{ data.label }}
+                    </template>
+                    <template #head(count)="data">
+                        #
+                    </template>
+                    <template #head()="data">
+                        <img :src="classToImage(data.label)" :alt="data.label" :title="data.label">
+                    </template>
+                    <template #cell(name)="data">
+                        <div class="text-nowrap"><a :href="'champthings?user=' + data.value">{{ data.value }}</a></div>
+                    </template>
+                    <template #cell(count)="data">
+                        {{ data.value }}
+                    </template>
+                    <template #cell()="data">
+                        <div v-if="data.unformatted.length > 0">
+                            <span class="win" :title="cellTooltip(data.unformatted)">
+                                <template v-if="displayMode == 'gender'">
+                                    {{ genderDisplay(data) }}
+                                </template>
+                                <template v-else-if="displayMode == 'times'">
+                                    &nbsp;{{ data.unformatted.length }}&nbsp;
+                                </template>
+                                <template v-else-if="displayMode == 'streak'">
+                                    &nbsp;{{ Math.max(...data.unformatted.map(x => x[1])) }}&nbsp;
+                                </template>
+                                <template v-else>
+                                    ✓
+                                </template>
+                            </span>
+                        </div>
+                        <div v-else>
+                            <span class="fail">×</span>
+                        </div>
+                    </template>
+                </b-table>
+            </div>
+        </div>
+    </body>
+</html>

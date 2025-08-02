@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>FFTBG champ classes - text</title>
+        <script>
+            window.onload = async () => {
+                const data = await (await fetch("dataslug.json")).json();
+                const startIndex = document.URL.indexOf("?");
+                if (startIndex < 0) return;
+                const querystring = document.URL.substring(startIndex);
+                const param = new URLSearchParams(querystring);
+                const user = param.get("user");
+                if (!user) return;
+                for (const row of data) {
+                    if (row.name == user) {
+                        const output = [];
+                        const keyPadLevel = Math.max(...Object.keys(row).map(s => s.length));
+                        for (const key of Object.keys(row)) {
+                            if (key == 'name') {
+                                output.push(`User: ${user}`);
+                            } else if (key == 'count') {
+                                output.push(`Classes: ${row[key]}`);
+                            } else {
+                                output.push(`${key.padEnd(keyPadLevel, ' ')}: Champed ${(''+row[key].length).padStart(3, ' ')} time${row[key].length == 1 ? '. ' : 's.'}  IDs: ${row[key].map(x => (''+x[0]).padStart(4, ' ')).join(", ")}`);
+                            }
+                        }
+                        document.getElementById("output").innerText = output.join("\n");
+                        break;
+                    }
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <pre id="output"></pre>
+    </body>
+</html>
