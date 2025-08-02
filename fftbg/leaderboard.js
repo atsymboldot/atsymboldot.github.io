@@ -23,14 +23,25 @@ window.onload = () => {
     new Vue({
         el: "#app",
         async created() {
-            this.tableData = await (await fetch("dataslug.json", {cache: "no-store"})).json();
-            this.tableData.sort((a, b) => a.count != b.count ? (a.count > b.count ? -1 : 1) : (a.name < b.name) ? -1 : 1);
-            this.tableColumns = Object.keys(this.tableData[0]).map(k => ({key: k, variant: this.variantForKey(k)}));
+            this.rawData = await (await fetch("dataslug.json", {cache: "no-store"})).json();
+            this.rawData.sort((a, b) => a.count != b.count ? (a.count > b.count ? -1 : 1) : (a.name < b.name) ? -1 : 1);
             this.loading = 0;
         },
         data() {
             return {
                 loading: 1,
+                columnMode: 'default',
+                columnOptions: [
+                    {text: "Default", value: 'default'},
+                    {text: "Gendered humans", value: 'gender'},
+                    {text: "Monsters", value: 'monster'},
+                ],
+                columnOrderMode: 'default',
+                columnOrderOptions: [
+                    {text: "Default", value: 'default'},
+                    {text: "Genders grouped", value: 'gender'},
+                    {text: "Elite/Strong monsters grouped", value: 'elite'},
+                ],
                 displayMode: 'default',
                 displayOptions: [
                     {text: "Default", value: 'default'},
@@ -38,13 +49,63 @@ window.onload = () => {
                     {text: "# Champs", value: 'times'},
                     {text: "Max Streak", value: 'streak'},
                 ],
-                tableData: [], 
-                tableColumns: [], 
+                rawData: [],
             }
+        },
+        computed: {
+            tableData() {
+                if (this.columnMode == 'default') {
+                    return this.rawData;
+                } else if (this.columnMode == 'gender') {
+                    const data = [];
+                    return this.rawData.map(x => {
+                        const entry = {name: x["name"], count: 0};
+                        let count = 0;
+                        Object.keys(x).forEach(y => {
+                            if (humans.includes(y)) {
+                                if (y == "Dancer") {
+                                    entry[y + 'F'] = x[y];
+                                } else if (y == "Bard") {
+                                    entry[y + 'M'] = x[y];
+                                } else {
+                                    entry[y + 'M'] = x[y].filter(z => z[2] == "Male");
+                                    entry[y + 'F'] = x[y].filter(z => z[2] == "Female");
+                                }
+                                if (entry[y + 'F'] && entry[y + 'F'].length > 0) {
+                                    count++;
+                                }
+                                if (entry[y + 'M'] && entry[y + 'M'].length > 0) {
+                                    count++;
+                                }
+                            }
+                        });
+                        entry["count"] = count;
+                        return entry;
+                    }).sort((a, b) => a.count != b.count ? (a.count > b.count ? -1 : 1) : (a.name < b.name) ? -1 : 1);
+                } else if (this.columnMode == 'monster') {
+                    return this.rawData.map(x => {
+                        const entry = {name: x["name"], count: 0};
+                        let count = 0;
+                        Object.keys(x).forEach(y => {
+                            if (classes.includes(y) && !humans.includes(y)) {
+                                entry[y] = x[y];
+                                if (x[y].length > 0) {
+                                    count++;
+                                }
+                            }
+                        });
+                        entry["count"] = count;
+                        return entry;
+                    }).sort((a, b) => a.count != b.count ? (a.count > b.count ? -1 : 1) : (a.name < b.name) ? -1 : 1);
+                }
+            },
+            tableColumns() {
+                return this.tableData.length > 0 ? Object.keys(this.tableData[0]).map(k => ({key: k, variant: this.variantForKey(k)})) : [];
+            },
         },
         methods: {
             classToImage(x) {
-                return `images/${x}` + (classes.indexOf(x) > 19 ? "" : x == "Dancer" ? "F" : x == "Bard" ? "M" : Math.random() < 0.5 ? "F" : "M") + ".gif";
+                return `images/${x}` + (classes.indexOf(x) < 0 || classes.indexOf(x) > 19 ? "" : x == "Dancer" ? "F" : x == "Bard" ? "M" : Math.random() < 0.5 ? "F" : "M") + ".gif";
             },
             variantForKey(k) {
                 return classes.indexOf(k) <= 19 ? "secondary" : elites.includes(k) ? "primary" : strongs.includes(k) ? "success" : "";

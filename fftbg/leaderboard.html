@@ -35,7 +35,10 @@
             <div v-if="loading">Loading</div>
             <div v-else>
                 <b-form-group class="mb-1">
-                    <b-form-radio-group buttons v-model="displayMode" :options="displayOptions"></b-form-radio-group>
+                    Columns:
+                    <b-form-radio-group buttons size="sm" v-model="columnMode" :options="columnOptions"></b-form-radio-group>
+                    Values:
+                    <b-form-radio-group buttons size="sm" v-model="displayMode" :options="displayOptions"></b-form-radio-group>
                 </b-form-group>
                 <b-table small borderless striped hover sticky-header="85vh" :items="tableData" :fields="tableColumns">
                     <template #table-colgroup="scope">
@@ -48,7 +51,7 @@
                         #
                     </template>
                     <template #head()="data">
-                        <img :src="classToImage(data.label)" :alt="data.label" :title="data.label">
+                        <img :src="classToImage(data.column)" :alt="data.column" :title="data.column">
                     </template>
                     <template #cell(name)="data">
                         <div class="text-nowrap"><a :href="'champthings?user=' + data.value">{{ data.value }}</a></div>
