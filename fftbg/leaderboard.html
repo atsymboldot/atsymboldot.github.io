@@ -11,6 +11,10 @@
 
         <script src="leaderboard.js"></script>
         <style>
+            .table tr:hover {
+                filter: brightness(80%);
+            }
+
             .table td, .table th {
                 padding: 0px !important;
                 text-align: center;
@@ -44,7 +48,7 @@
                     </b-dropdown>
                     <span>Updated as of champ #<strong>{{ mostRecentChamp }}</strong></span>
                 </b-form-group>
-                <b-table small borderless striped hover sticky-header="85vh" :items="tableData" :fields="tableColumns">
+                <b-table small borderless sticky-header="85vh" :items="tableData" :fields="tableColumns">
                     <template #table-colgroup="scope">
                         <col v-for="field in scope.fields" :key="field.key" :variant="variantForKey(field.key)">
                     </template>
