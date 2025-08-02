@@ -51,7 +51,12 @@ const seasons = {
     16: 12723,
     17: 13983,
     18: 15170,
-    19: 999999, // must exist to define (inferred) end of prior season
+    19: 16164,
+    20: 17212,
+    21: 18321,
+    22: 19536,
+    23: 999999, // must exist to define (inferred) end of prior season
+
 };
 
 const champComparator = (a, b) => {
@@ -105,24 +110,28 @@ window.onload = () => {
                 seasonMode: getParams.season ? parseInt(getParams.season) : 0,
                 seasonOptions: [
                     {text: "All-time", value: 0},
-                    {text: "Season 1", value: 1},
-                    {text: "Season 2", value: 2},
-                    {text: "Season 3", value: 3},
-                    {text: "Season 4", value: 4},
-                    {text: "Season 5", value: 5},
-                    {text: "Season 6", value: 6},
-                    {text: "Season 7", value: 7},
-                    {text: "Season 8", value: 8},
-                    {text: "Season 9", value: 9},
-                    {text: "Season 10", value: 10},
-                    {text: "Season 11", value: 11},
-                    {text: "Season 12", value: 12},
-                    {text: "Season 13", value: 13},
-                    {text: "Season 14", value: 14},
-                    {text: "Season 15", value: 15},
-                    {text: "Season 16", value: 16},
-                    {text: "Season 17", value: 17},
+                    {text: "Season 22", value: 22},
+                    {text: "Season 21", value: 21},
+                    {text: "Season 20", value: 20},
+                    {text: "Season 19", value: 19},
                     {text: "Season 18", value: 18},
+                    {text: "Season 17", value: 17},
+                    {text: "Season 16", value: 16},
+                    {text: "Season 15", value: 15},
+                    {text: "Season 14", value: 14},
+                    {text: "Season 13", value: 13},
+                    {text: "Season 12", value: 12},
+                    {text: "Season 11", value: 11},
+                    {text: "Season 10", value: 10},
+                    {text: "Season 9", value: 9},
+                    {text: "Season 8", value: 8},
+                    {text: "Season 7", value: 7},
+                    {text: "Season 6", value: 6},
+                    {text: "Season 5", value: 5},
+                    {text: "Season 4", value: 4},
+                    {text: "Season 3", value: 3},
+                    {text: "Season 2", value: 2},
+                    {text: "Season 1", value: 1},
                 ],
                 rawData: [],
             };
@@ -145,7 +154,7 @@ window.onload = () => {
                             }
                         });
                         return ret;
-                    }).filter(x => x.count >= 5 || (this.seasonMode == 18/* update for new season */ && x.count >= 1)).sort(champComparator);
+                    }).filter(x => x.count >= 5 || (this.seasonMode == 22/* update for new season */ && x.count >= 1)).sort(champComparator);
                 }
             },
             mostRecentChamp() {
