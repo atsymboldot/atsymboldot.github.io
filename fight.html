@@ -39,6 +39,7 @@ function damage(p, m) {
 }
 
 function simulate(p, m) {
+  const DURATION_LIMIT = 200;
   let playerhp = p.maxHP;
   let monsterhp = m.maxHP;
   let turns = 0;
@@ -57,25 +58,31 @@ function simulate(p, m) {
         playerhp -= damage(m, p);
       }
     }
+    if (turns >= DURATION_LIMIT) {
+      break;
+    }
   }
-  return { turns, playerhp, monsterhp, won: playerhp > 0 };
+  let outcome = (playerhp <= 0 ? -1 : monsterhp <= 0 ? 1 : 0);
+  return { turns, playerhp, monsterhp, outcome };
 }
 
 function stats(p, m, n) {
-  let turnsWinSum = 0, turnsLossSum = 0, playerRemHp = 0, monsterRemHp = 0, winCount = 0, lossCount = 0;
+  let turnsWinSum = 0, turnsLossSum = 0, playerRemHp = 0, monsterRemHp = 0, winCount = 0, lossCount = 0, tieCount = 0;
   for (let i = 0; i < n; i++) {
     const res = simulate(p, m);
-    if (res.won) {
+    if (res.outcome == 1) {
       winCount++;
       turnsWinSum += res.turns;
       playerRemHp += res.playerhp;
-    } else {
+    } else if (res.outcome == -1) {
       lossCount++;
       turnsLossSum += res.turns;
       monsterRemHp += res.monsterhp;
+    } else {
+      tieCount++;
     }
   }
-  return { turnsWinSum, turnsLossSum, playerRemHp, monsterRemHp, winCount, lossCount, n };
+  return { turnsWinSum, turnsLossSum, playerRemHp, monsterRemHp, winCount, lossCount, tieCount, n };
 }
 
 function defaultPlayer() {
@@ -238,7 +245,8 @@ window.onload = async () => {
         <b-form-input number v-model="iterations" size="sm"></b-form-input>
       </b-form-group>
       <div v-if="results.n">
-        Win rate: {{ winRate() }} ({{ results.winCount }}/{{ results.n }})<br>
+        Outcomes (W-T-L): {{ results.winCount }}-{{ results.tieCount }}-{{ results.lossCount }}<br>
+        Win rate: {{ winRate() }}<br>
         Avg turns to win: {{ turnsToWin() }}<br>
         Avg player HP left in wins: {{ playerHpLeft() }}<br>
         Avg turns to lose: {{ turnsToLose() }}<br>
