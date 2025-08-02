@@ -12,6 +12,8 @@ th, td {
 
 thead { position: sticky; top: 0; line-height: 0; z-index: 999; }
 tfoot { position: sticky; bottom: 0; line-height: 0; z-index: 999; }
+thead th:first-child, tfoot th:first-child { position: sticky; left: 0; z-index: 999; }
+tbody th { position: sticky; left: 0; z-index: 998; }
 
 a { text-decoration: none; }
 img { max-width: 20px; }
