@@ -10,7 +10,8 @@ th, td {
     background-color: lightgray;
 }
 
-th { position: sticky; top: 0; line-height: 0; }
+thead { position: sticky; top: 0; line-height: 0; }
+tfoot { position: sticky; bottom: 0; line-height: 0; }
 
 a { text-decoration: none; }
 img { max-width: 20px; }
