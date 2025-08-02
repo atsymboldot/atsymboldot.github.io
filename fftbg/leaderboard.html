@@ -42,6 +42,7 @@
                     Season: <b-dropdown :text="seasonToDisplay(seasonMode)" size="sm" ref="seasonDropdown">
                             <b-form-radio-group buttons stacked class="w-100" size="sm" v-model="seasonMode" :options="seasonOptions"></b-form-radio-group>
                     </b-dropdown>
+                    <span>Updated as of champ #<strong>{{ mostRecentChamp }}</strong></span>
                 </b-form-group>
                 <b-table small borderless striped hover sticky-header="85vh" :items="tableData" :fields="tableColumns">
                     <template #table-colgroup="scope">
