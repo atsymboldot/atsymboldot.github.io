@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>FFTBG champ classes</title>
+        <script>
+            const classes = [
+              "Squire", "Chemist", "Knight", "Archer", "Monk", "Priest", "Wizard", "Time Mage", "Summoner", "Thief",
+              "Mediator", "Oracle", "Geomancer", "Lancer", "Samurai", "Ninja", "Calculator", "Dancer", "Bard", "Mime",
+              "Chocobo", "Black Chocobo", "Red Chocobo", "Goblin", "Black Goblin", "Gobbledeguck", "Bomb", "Grenade", "Explosive", "Red Panther",
+              "Coeurl", "Vampire", "Pisco Demon", "Squidraken", "Mindflayer", "Skeleton", "Draugr", "Reaper", "Ghoul", "Ghost",
+              "Revenant", "Floating Eye", "Ahriman", "Plague", "Juravis", "Iron Hawk", "Cockatrice", "Swine", "Porky", "Wild Boar",
+              "Dryad", "Treant", "Taiju", "Bull Demon", "Minotaur", "Sekhret", "Malboro", "Ochu", "Great Malboro", "Behemoth",
+              "King Behemoth", "Dark Behemoth", "Dragon", "Blue Dragon", "Red Dragon", "Wyvern", "Hydra", "Tiamat", "Archaic Demon", "Ultima Demon",
+              "Apanda", "Steel Giant", "Byblos", "Holy Dragon", "Serpentarius",
+            ];
+
+            function getGender(c) {
+                const i = classes.indexOf(c);
+                if (i < 0 || i > 19) {
+                    return '';
+                }
+                if (c == 'Dancer') {
+                    return 'F';
+                }
+                if (c == 'Bard') {
+                    return 'M';
+                }
+                return Math.random() < 0.5 ? 'M' : 'F';
+            }
+            window.onload = async () => {
+                const data = await (await fetch("dataslug.json", {cache: "no-store"})).json();
+                const html = [];
+                html.push('<table>');
+                html.push('<thead><tr>');
+                html.push('<th>Name</th>');
+                html.push('<th>#</th>');
+                for (const c of classes) {
+                    html.push(`<th><img src="images/${c}${getGender(c)}.gif`);
+                }
+                html.push('</tr></thead>');
+                html.push('<tbody>');
+                for (const row of data) {
+                    html.push('<tr>');
+                    html.push('<td>${row.name}</td>');
+                    html.push('<td>${row.count}</td>');
+                    for (const c of classes) {
+                        html.push('<td>${row[c].length}</td>');
+                    }
+                    html.push('</tr>');
+                }
+                html.push('</tbody>');
+                html.push('</table>');
+            }
+        </script>
+    </head>
+    <body>
+        <pre id="output">Loading</pre>
+    </body>
+</html>
