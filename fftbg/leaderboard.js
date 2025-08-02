@@ -1,3 +1,6 @@
+const getParams = Object.fromEntries(window.location.search.substr(1).split('&').map(x => x.split('=')));
+if (getParams.season) getParams.season = parseInt(getParams.season);
+
 const classes = [
   "Squire", "Chemist", "Knight", "Archer", "Monk", "Priest", "Wizard", "Time Mage", "Summoner", "Thief",
   "Mediator", "Oracle", "Geomancer", "Lancer", "Samurai", "Ninja", "Calculator", "Dancer", "Bard", "Mime",
@@ -18,6 +21,15 @@ const humans = [
 ];
 const elites = ["Byblos", "Dark Behemoth", "Holy Dragon", "Red Chocobo", "Serpentarius", "Steel Giant", "Tiamat", "Ultima Demon"];
 const strongs = ["Apanda", "Archaic Demon", "Blue Dragon", "Dragon", "Hydra", "King Behemoth", "Red Dragon", "Sekhret"];
+
+/*
+ * for a new season:
+ *   - update the seasons const with the smallest champ_id that falls in the season
+ *   - ensure that the seasons const has a dummy entry for the season after the current one
+ *   - update data() -> seasonOptions to make the new season selectable
+ *   - tweak seasonFilteredData() to reduce the minimum user champ count for the new season, to avoid empty leaderboard when too early in the season
+ * TODO: make this less stupid
+ */
 const seasons = {
     1: 1,
     2: 616,
@@ -33,7 +45,33 @@ const seasons = {
     12: 8541,
     13: 9559,
     14: 10533,
-    15: 999999, // must exist to define (inferred) end of prior season
+    15: 11590,
+    16: 12723,
+    17: 999999, // must exist to define (inferred) end of prior season
+};
+
+const champComparator = (a, b) => {
+    if (a.count != b.count) {
+        return b.count - a.count;
+    }
+    let mostRecentA = 0, mostRecentB = 0;
+    for (const c of Object.keys(a)) {
+        if (c == 'name' || c == 'count') {
+            continue;
+        }
+        if (a[c].length > 0) {
+            mostRecentA = Math.max(mostRecentA, a[c][0][0]);
+        }
+    }
+    for (const c of Object.keys(b)) {
+        if (c == 'name' || c == 'count') {
+            continue;
+        }
+        if (b[c].length > 0) {
+            mostRecentB = Math.max(mostRecentB, b[c][0][0]);
+        }
+    }
+    return mostRecentA - mostRecentB;
 };
 
 window.onload = () => {
@@ -41,26 +79,26 @@ window.onload = () => {
         el: "#app",
         async created() {
             this.rawData = await (await fetch("dataslug.json", {cache: "no-store"})).json();
-            this.rawData.sort((a, b) => a.count != b.count ? (a.count > b.count ? -1 : 1) : (a.name < b.name) ? -1 : 1);
+            this.rawData.sort(champComparator);
             this.loading = 0;
         },
         data() {
             return {
                 loading: 1,
-                columnMode: 'default',
+                columnMode: getParams.column ? getParams.column : 'default',
                 columnOptions: [
                     {text: "Default", value: 'default'},
                     {text: "Gendered humans", value: 'gender'},
                     {text: "Monsters", value: 'monster'},
                 ],
-                displayMode: 'default',
+                displayMode: getParams.display ? getParams.display : 'default',
                 displayOptions: [
                     {text: "Default", value: 'default'},
                     {text: "Gendered", value: 'gender'},
                     {text: "# Champs", value: 'times'},
                     {text: "Max Streak", value: 'streak'},
                 ],
-                seasonMode: 0,
+                seasonMode: getParams.season ? parseInt(getParams.season) : 0,
                 seasonOptions: [
                     {text: "All-time", value: 0},
                     {text: "Season 1", value: 1},
@@ -77,6 +115,8 @@ window.onload = () => {
                     {text: "Season 12", value: 12},
                     {text: "Season 13", value: 13},
                     {text: "Season 14", value: 14},
+                    {text: "Season 15", value: 15},
+                    {text: "Season 16", value: 16},
                 ],
                 rawData: [],
             };
@@ -99,7 +139,7 @@ window.onload = () => {
                             }
                         });
                         return ret;
-                    }).filter(x => x.count >= 5 || (this.seasonMode == 14 && x.count >= 2)).sort((a, b) => a.count != b.count ? (a.count > b.count ? -1 : 1) : (a.name < b.name) ? -1 : 1);
+                    }).filter(x => x.count >= 5 || (this.seasonMode == 16/* update for new season */ && x.count >= 1)).sort(champComparator);
                 }
             },
             mostRecentChamp() {
@@ -143,7 +183,7 @@ window.onload = () => {
                         });
                         entry["count"] = count;
                         return entry;
-                    }).sort((a, b) => a.count != b.count ? (a.count > b.count ? -1 : 1) : (a.name < b.name) ? -1 : 1);
+                    }).sort(champComparator);
                 } else if (this.columnMode == 'monster') {
                     return this.seasonFilteredData.map(x => {
                         const entry = {name: x["name"], count: 0};
@@ -158,7 +198,7 @@ window.onload = () => {
                         });
                         entry["count"] = count;
                         return entry;
-                    }).sort((a, b) => a.count != b.count ? (a.count > b.count ? -1 : 1) : (a.name < b.name) ? -1 : 1);
+                    }).sort(champComparator);
                 }
             },
             tableColumns() {
