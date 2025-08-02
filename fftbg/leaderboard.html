@@ -39,6 +39,9 @@
                     <b-form-radio-group buttons size="sm" v-model="columnMode" :options="columnOptions"></b-form-radio-group>
                     Values:
                     <b-form-radio-group buttons size="sm" v-model="displayMode" :options="displayOptions"></b-form-radio-group>
+                    Season: <b-dropdown :text="seasonToDisplay(seasonMode)" size="sm" ref="seasonDropdown">
+                            <b-form-radio-group buttons stacked class="w-100" size="sm" v-model="seasonMode" :options="seasonOptions"></b-form-radio-group>
+                    </b-dropdown>
                 </b-form-group>
                 <b-table small borderless striped hover sticky-header="85vh" :items="tableData" :fields="tableColumns">
                     <template #table-colgroup="scope">

@@ -18,6 +18,21 @@ const humans = [
 ];
 const elites = ["Byblos", "Dark Behemoth", "Holy Dragon", "Red Chocobo", "Serpentarius", "Steel Giant", "Tiamat", "Ultima Demon"];
 const strongs = ["Apanda", "Archaic Demon", "Blue Dragon", "Dragon", "Hydra", "King Behemoth", "Red Dragon", "Sekhret"];
+const seasons = {
+    1: 1,
+    2: 616,
+    3: 1216,
+    4: 1928,
+    5: 2755,
+    6: 3521,
+    7: 4225,
+    8: 4944,
+    9: 5739,
+    10: 6544,
+    11: 7419,
+    12: 8541,
+    13: 99999,
+};
 
 window.onload = () => {
     new Vue({
@@ -36,12 +51,6 @@ window.onload = () => {
                     {text: "Gendered humans", value: 'gender'},
                     {text: "Monsters", value: 'monster'},
                 ],
-                columnOrderMode: 'default',
-                columnOrderOptions: [
-                    {text: "Default", value: 'default'},
-                    {text: "Genders grouped", value: 'gender'},
-                    {text: "Elite/Strong monsters grouped", value: 'elite'},
-                ],
                 displayMode: 'default',
                 displayOptions: [
                     {text: "Default", value: 'default'},
@@ -49,16 +58,52 @@ window.onload = () => {
                     {text: "# Champs", value: 'times'},
                     {text: "Max Streak", value: 'streak'},
                 ],
+                seasonMode: 0,
+                seasonOptions: [
+                    {text: "All-time", value: 0},
+                    {text: "Season 1", value: 1},
+                    {text: "Season 2", value: 2},
+                    {text: "Season 3", value: 3},
+                    {text: "Season 4", value: 4},
+                    {text: "Season 5", value: 5},
+                    {text: "Season 6", value: 6},
+                    {text: "Season 7", value: 7},
+                    {text: "Season 8", value: 8},
+                    {text: "Season 9", value: 9},
+                    {text: "Season 10", value: 10},
+                    {text: "Season 11", value: 11},
+                    {text: "Season 12", value: 12},
+                ],
                 rawData: [],
-            }
+            };
         },
         computed: {
+            seasonFilteredData() {
+                if (this.seasonMode < 1 || this.seasonMode > Object.keys(seasons).length) {
+                    return this.rawData.filter(x => x.count >= 20);
+                } else {
+                    let minChampId = seasons[this.seasonMode];
+                    let maxChampId = seasons[this.seasonMode + 1] - 1;
+                    return this.rawData.map(x => {
+                        const ret = {};
+                        ret.name = x.name;
+                        ret.count = 0;
+                        classes.forEach(c => {
+                            ret[c] = x[c].filter(y => minChampId <= y[0] && y[0] <= maxChampId);
+                            if (ret[c].length > 0) {
+                                ret.count++;
+                            }
+                        });
+                        return ret;
+                    }).filter(x => x.count >= 5).sort((a, b) => a.count != b.count ? (a.count > b.count ? -1 : 1) : (a.name < b.name) ? -1 : 1);
+                }
+            },
             tableData() {
                 if (this.columnMode == 'default') {
-                    return this.rawData;
+                    return this.seasonFilteredData;
                 } else if (this.columnMode == 'gender') {
                     const data = [];
-                    return this.rawData.map(x => {
+                    return this.seasonFilteredData.map(x => {
                         const entry = {name: x["name"], count: 0};
                         let count = 0;
                         Object.keys(x).forEach(y => {
@@ -83,7 +128,7 @@ window.onload = () => {
                         return entry;
                     }).sort((a, b) => a.count != b.count ? (a.count > b.count ? -1 : 1) : (a.name < b.name) ? -1 : 1);
                 } else if (this.columnMode == 'monster') {
-                    return this.rawData.map(x => {
+                    return this.seasonFilteredData.map(x => {
                         const entry = {name: x["name"], count: 0};
                         let count = 0;
                         Object.keys(x).forEach(y => {
@@ -103,7 +148,15 @@ window.onload = () => {
                 return this.tableData.length > 0 ? Object.keys(this.tableData[0]).map(k => ({key: k, variant: this.variantForKey(k)})) : [];
             },
         },
+        watch: {
+            seasonMode(x) {
+                this.$refs.seasonDropdown.hide(true);
+            },
+        },
         methods: {
+            seasonToDisplay(x) {
+                return x == 0 ? "All-time" : `Season ${x}`;
+            },
             classToImage(x) {
                 return `images/${x}` + (classes.indexOf(x) < 0 || classes.indexOf(x) > 19 ? "" : x == "Dancer" ? "F" : x == "Bard" ? "M" : Math.random() < 0.5 ? "F" : "M") + ".gif";
             },
