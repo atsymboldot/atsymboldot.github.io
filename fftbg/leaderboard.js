@@ -22,6 +22,8 @@ const humans = [
 const elites = ["Byblos", "Dark Behemoth", "Holy Dragon", "Red Chocobo", "Serpentarius", "Steel Giant", "Tiamat", "Ultima Demon"];
 const strongs = ["Apanda", "Archaic Demon", "Blue Dragon", "Dragon", "Hydra", "King Behemoth", "Red Dragon", "Sekhret"];
 
+const randomizedGenders = Array(20).fill(0).map(x => Math.random() < 0.5 ? 'F' : 'M');
+
 /*
  * for a new season:
  *   - update the seasons const with the smallest champ_id that falls in the season
@@ -217,7 +219,7 @@ window.onload = () => {
                 return x == 0 ? "All-time" : `Season ${x}`;
             },
             classToImage(x) {
-                return `images/${x}` + (classes.indexOf(x) < 0 || classes.indexOf(x) > 19 ? "" : x == "Dancer" ? "F" : x == "Bard" ? "M" : Math.random() < 0.5 ? "F" : "M") + ".gif";
+                return `images/${x}` + (classes.indexOf(x) < 0 || classes.indexOf(x) > 19 ? "" : x == "Dancer" ? "F" : x == "Bard" ? "M" : randomizedGenders[classes.indexOf(x)]) + ".gif";
             },
             variantForKey(k) {
                 return classes.indexOf(k) <= 19 ? "secondary" : elites.includes(k) ? "primary" : strongs.includes(k) ? "success" : "light";
