@@ -11,6 +11,9 @@
 <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.js"></script>
 
 
+<style>
+.form-group { margin-bottom: 0px; }
+</style>
 <script type="module">
 
 //import { AndorsTrailData } from './AndorsTrailData.js';
@@ -27,7 +30,11 @@ function hit(p, m) {
 
 function damage(p, m) {
   const range = p.attackDamage.max - p.attackDamage.min + 1;
-  const rawdmg = p.attackDamage.min + roll(range);
+  let rawdmg = p.attackDamage.min + roll(range);
+  const critProbability = Math.floor(2 * Math.sqrt(5 * p.criticalSkill) - 5);
+  if (roll(100) < critProbability) {
+    rawdmg *= p.criticalMultiplier;
+  }
   return rawdmg - m.damageResistance;
 }
 
@@ -157,6 +164,12 @@ window.onload = async () => {
       <b-form-group label-cols="6" label-size="sm" label="Max damage">
         <b-form-input number v-model="player.attackDamage.max" size="sm"></b-form-input>
       </b-form-group>
+      <b-form-group label-cols="6" label-size="sm" label="Critical skill">
+        <b-form-input number v-model="player.criticalSkill" size="sm"></b-form-input>
+      </b-form-group>
+      <b-form-group label-cols="6" label-size="sm" label="Critical multiplier">
+        <b-form-input number v-model="player.criticalMultiplier" size="sm"></b-form-input>
+      </b-form-group>
       <b-form-group label-cols="6" label-size="sm" label="Block chance">
         <b-form-input number v-model="player.blockChance" size="sm"></b-form-input>
       </b-form-group>
@@ -183,6 +196,12 @@ window.onload = async () => {
       <b-form-group label-cols="6" label-size="sm" label="Max damage">
         <b-form-input number v-model="monster.attackDamage.max" size="sm"></b-form-input>
       </b-form-group>
+      <b-form-group label-cols="6" label-size="sm" label="Critical skill">
+        <b-form-input number v-model="monster.criticalSkill" size="sm"></b-form-input>
+      </b-form-group>
+      <b-form-group label-cols="6" label-size="sm" label="Critical multiplier">
+        <b-form-input number v-model="monster.criticalMultiplier" size="sm"></b-form-input>
+      </b-form-group>
       <b-form-group label-cols="6" label-size="sm" label="Block chance">
         <b-form-input number v-model="monster.blockChance" size="sm"></b-form-input>
       </b-form-group>
@@ -195,7 +214,7 @@ window.onload = async () => {
         <b-form-input number v-model="iterations" size="sm"></b-form-input>
       </b-form-group>
       <div v-if="results.n">
-        Win rate: {{ winRate() }}<br>
+        Win rate: {{ winRate() }} ({{ results.winCount }}/{{ results.n }})<br>
         Avg turns to win: {{ turnsToWin() }}<br>
         Avg player HP left in wins: {{ playerHpLeft() }}<br>
         Avg turns to lose: {{ turnsToLose() }}<br>
