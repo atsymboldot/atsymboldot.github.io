@@ -264,7 +264,7 @@ window.onload = () => {
             cellTooltip(dataholder) {
                 const data = dataholder.unformatted;
                 if (data.length > 0) {
-                    return `First champed #${data[0][0]}; ${data.length} time${data.length == 1 ? '' : 's'} total`;
+                    return `First champed #${data[0][0]}; ${data.length} time${data.length == 1 ? '' : 's'} total with ${dataholder.field.label}`;
                 } else {
                     return `No champs with ${dataholder.field.label}`;
                 }
